@@ -1,0 +1,21 @@
+:root {
+  /* Cores básicas do site */
+  --primary-color: blue;
+
+  /* Gradiente de cinzas */
+  --surface-0: #ffffff;
+  --surface-50: #eff3f6;
+  --surface-100: #dce0e5;
+  --surface-150: #c5cbd4;
+  --surface-200: #a7b5c0;
+  --surface-300: #bcbcc2;
+  --surface-400: #a5a5af;
+  --surface-500: #8f8f9a;
+  --surface-550: #808589;
+  --surface-600: #6b6f73;
+  --surface-700: #4d5258;
+  --surface-800: #464d52;
+  --surface-850: #30343b;
+  --surface-900: #24282e;
+  --surface-1000: #191c1e;
+}

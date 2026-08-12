@@ -1,0 +1,10 @@
+/* Fontes */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
+/* Bases */
+@import url("base/variables.css");
+@import url("base/base.css");
+
+/* Layouts */
+@import url("layout/header.css");
+@import url("layout/footer.css");
