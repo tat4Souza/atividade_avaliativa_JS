@@ -1,7 +1,97 @@
 <div class="main-content__container">
-  <h1>Exercício Dois</h1>
+  <h1>Cálculo de salário</h1>
 
-  <section>
-    <p>Na espera de formulário com as instruções do exercício...🚧</p>
+  <section class="ex__container" id="sectionForms">
+    <div class="form__container" id="settingsFormContainer">
+      <p>Para prosseguir aos pedidos, insira o valor do salário mínimo:</p>
+      <form>
+        <custom-input
+          name="minWage"
+          type="number"
+          title="Salário Mínimo"
+        ></custom-input>
+
+        <label
+          id="formMessageSetting"
+          class="hideComponent form-message"
+        ></label>
+
+        <button type="submit" class="form__btn">Prosseguir</button>
+      </form>
+    </div>
+
+    <div class="form__container hideComponent" id="employeeFormContainer">
+      <div class="form__header">
+        <p>
+          Preencha as informações dos funcionários e, quando estiver pronto,
+          clique no botão ao lado:
+        </p>
+        <button class="form__btn" id="btnFinishForm">Gerar relatório</button>
+      </div>
+
+      <form id="employeesForm">
+        <custom-input
+          name="emp_code"
+          title="Código do Funcionário"
+          type="text"
+        ></custom-input>
+
+        <custom-input
+          name="emp_hours"
+          title="Horas trabalhadas no mês"
+          type="text"
+        ></custom-input>
+
+        <custom-input
+          name="emp_category"
+          title="Categoria"
+          type="select"
+          options="Funcionário Operacional, Gerente"
+        ></custom-input>
+
+        <custom-input
+          name="emp_shift"
+          title="Turno"
+          type="select"
+          options="Matutino, Vespertino, Noturno"
+        ></custom-input>
+
+        <custom-input
+          name="emp_performance"
+          title="Avaliação de desempenho mensal"
+          type="number"
+        ></custom-input>
+
+        <custom-input
+          name="emp_hours_value"
+          title="Valor da hora trabalhada"
+          type="select"
+          options="Funcionário | Matutino, Funcionário | Vespertino, Funcionário | Noturno, Gerente | Matutino, Gerente | Vespertino, Gerente | Norturno"
+        ></custom-input>
+
+        <custom-input
+          name="emp_food"
+          title="Auxílio alimentação"
+          type="number"
+        ></custom-input>
+
+        <custom-input
+          name="emp_bonus"
+          title="Bônus do desempenho"
+          type="number"
+        ></custom-input>
+
+        <label
+          id="formMessageEmployee"
+          class="hideComponent form-message"
+        ></label>
+
+        <button type="submit" class="form__btn">Prosseguir</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="hideComponent" id="sectionReports">
+    <h2>Relatório:</h2>
   </section>
 </div>

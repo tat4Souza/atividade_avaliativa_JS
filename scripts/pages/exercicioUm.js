@@ -1,12 +1,17 @@
-import { formatPrice } from "../utils/helpers.js";
+import {
+  showMessage,
+  alterComponentVisibility,
+  formatPrice,
+} from "../utils/helpers.js";
 
 export function init() {
   const settingsFormContainer = document.getElementById(
     "settingsFormContainer",
   );
   const ordersFormContainer = document.getElementById("ordersFormContainer");
-  const ordersForm = document.getElementById("ordersForm");
+  const ordersForms = document.getElementById("ordersForm");
   const sectionReports = document.getElementById("sectionReports");
+  const sectionForm = document.getElementById("sectionForms");
   const settingsMessage = document.getElementById("formMessageSetting");
   const ordersMessage = document.getElementById("formMessageOrder");
 
@@ -66,26 +71,11 @@ export function init() {
       currentOrder++;
       ordersForm.reset();
     } else {
-      alterComponentVisibility(ordersFormContainer, sectionReports);
+      alterComponentVisibility(sectionForms, sectionReports);
       const finalReport = generateReport(ordersList);
       renderReport(finalReport);
     }
   });
-}
-
-function showMessage(label, message) {
-  label.classList.remove("hideComponent");
-  label.classList.add("viewComponent");
-
-  label.innerText = message;
-}
-
-function alterComponentVisibility(hiddenComponent, visibleComponent) {
-  hiddenComponent.classList.remove("viewComponent");
-  hiddenComponent.classList.add("hideComponent");
-
-  visibleComponent.classList.remove("hideComponent");
-  visibleComponent.classList.add("viewComponent");
 }
 
 function calcOrderTotal(qtd, reg, dist, track, gas) {

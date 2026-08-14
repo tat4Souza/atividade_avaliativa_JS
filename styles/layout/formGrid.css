@@ -65,8 +65,18 @@
   padding: 1rem;
 }
 
+.form__header {
+  display: flex;
+  justify-content: space-between;
+}
+
 .section-reports {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.form__header p {
+  display: block;
+  width: 70%;
 }
