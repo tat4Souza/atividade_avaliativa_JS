@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   for (let path in routes) {
-    if (path === "/") continue;
+    if (routes[path].file === null) continue;
     const menuLink = document.createElement("li");
     const formattedText = path
       .replace("/", "")
@@ -35,8 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function router() {
-    const path = window.location.pathname;
-    const route = routes[path] || routes["/"];
+    const route = routes[window.location.pathname] || routes["/"];
 
     if (!route.file) {
       mainContent.innerHTML = "<h2>Selecione um exercício</h2>";

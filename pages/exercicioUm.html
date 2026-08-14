@@ -1,7 +1,103 @@
 <div class="main-content__container">
-  <h1>Exercício Um</h1>
+  <h1>Cálculo de frete para empresa metalmecânica</h1>
 
-  <section>
-    <p>Na espera de formulário com as instruções do exercício...🚧</p>
+  <section class="ex__container" id="sectionForms">
+    <div class="form__container" id="settingsFormContainer">
+      <p>Para prosseguir aos pedidos, insira as informações abaixo:</p>
+      <form>
+        <div class="form__input-label">
+          <label for="gas">Valor do combustível por Litro:</label>
+          <input type="number" id="gas" placeholder="Valor Combustível" />
+        </div>
+
+        <div class="form__input-label">
+          <label for="orders">Quantidade de pedidos a serem feitos:</label>
+          <input
+            type="number"
+            id="orders"
+            placeholder="Quantidade de Pedidos"
+          />
+        </div>
+
+        <label
+          id="formMessageSetting"
+          class="hideComponent form-message"
+        ></label>
+
+        <button type="submit" class="form__btn">Prosseguir</button>
+      </form>
+    </div>
+
+    <div class="form__container hideComponent" id="ordersFormContainer">
+      <p>Para cadastrar o pedido, por favor preencha abaixo:</p>
+      <form id="ordersForm">
+        <div class="form__input-label">
+          <label for="ord_id">Código do pedido:</label>
+          <input type="text" id="ord_id" placeholder="Código do Pedido" />
+        </div>
+
+        <div class="form__input-label">
+          <label for="ord_region">Região:</label>
+          <select
+            name="region"
+            id="ord_region"
+            aria-placeholder="Selecione uma região"
+          >
+            <option value="opt1">Sudeste (R$ 1,20 por peça)</option>
+            <option value="opt2">Sul (R$ 1,30 por peça)</option>
+            <option value="opt3">Centro-Oeste (R$ 1,50 por peça)</option>
+          </select>
+        </div>
+
+        <div class="form__input-label">
+          <label for="ord_distance">Distância (em Km):</label>
+          <input
+            type="number"
+            id="ord_distance"
+            placeholder="Distância a percorrer"
+          />
+        </div>
+
+        <div class="form__input-label">
+          <label for="ord_qtd_parts">Quantidade de pecas:</label>
+          <input type="number" id="ord_qtd_parts" placeholder="Quantidade" />
+        </div>
+
+        <div class="form__input-label form__input-label--switch">
+          <label for="ord_tracking">
+            Rastreamento (R$ 200):
+            <input
+              type="checkbox"
+              role="switch"
+              id="ord_tracking"
+              placeholder="Quantidade"
+            />
+          </label>
+        </div>
+
+        <label id="formMessageOrder" class="hideComponent form-message"></label>
+
+        <button type="submit" class="form__btn">Enviar</button>
+      </form>
+    </div>
+  </section>
+
+  <section id="sectionReports" class="hideComponent section-reports">
+    <h2>Relatório</h2>
+    <ul>
+      <li>Número total de pedidos realizados: <span id="total"></span></li>
+      <li>Valor médio pago por pedido: <span id="mediumPerOrder"></span></li>
+      <li>
+        Valor total acumulado em cada região: <span id="totalPerRegion"></span>
+      </li>
+      <li>
+        Código e valor total pago pelo pedido mais caro:
+        <span id="expensiveOrder"></span>
+      </li>
+      <li>
+        Código e valor total pego pelo pedido mais barato:
+        <span id="cheapestOrder"></span>
+      </li>
+    </ul>
   </section>
 </div>
