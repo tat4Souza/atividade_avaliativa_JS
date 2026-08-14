@@ -55,12 +55,7 @@ export function init() {
       },
     };
 
-    if (
-      ordersList.length != 0 &&
-      ordersList.find((order) => {
-        return order.id == orderData.id;
-      }) != undefined
-    ) {
+    if (ordersList.some((order) => order.id === orderData.id)) {
       showMessage(ordersMessage, "Um pedido com esse id já existe!");
       return;
     }
@@ -93,53 +88,22 @@ function alterComponentVisibility(hiddenComponent, visibleComponent) {
   visibleComponent.classList.add("viewComponent");
 }
 
-function renderReport(report) {
-  const total = document.getElementById("total");
-  const mediumPerOrder = document.getElementById("mediumPerOrder");
-  const totalPerRegion = document.getElementById("totalPerRegion");
-  const expensiveOrder = document.getElementById("expensiveOrder");
-  const cheapestOrder = document.getElementById("cheapestOrder");
-
-  total.innerText = report.total;
-  mediumPerOrder.innerText = report.mediumPerOrder;
-  totalPerRegion.innerText = `Sudeste: ${report.totalPerRegion.southeast}, Sul: ${report.totalPerRegion.south}, Centro-Oeste: ${report.totalPerRegion.midwest}`;
-  expensiveOrder.innerText = `Código: ${report.expensiveOrder.code}; Total gasto: ${report.expensiveOrder.total}`;
-  cheapestOrder.innerText = `Código: ${report.cheapestOrder.code}; Total gasto: ${report.cheapestOrder.total}`;
-}
-
 function calcOrderTotal(qtd, reg, dist, track, gas) {
-  let partsPrice = 0;
-
   const numQtd = Number(qtd);
   const numDist = Number(dist);
 
-  let preDiscount = 0;
-  let discount = 0;
+  const unitPrices = { opt1: 1.2, opt2: 1.3, opt3: 1.5 };
+  const basePrice = unitPrices[reg] || 1.0;
 
-  function calcPriceDisc(q, p) {
-    if (q > 1000) {
-      preDiscount = 1000 * p;
-      discount = (q - 1000) * (p - p * 0.12);
-    } else {
-      preDiscount = numQtd * p;
-      discount = 0;
-    }
+  let partsPrice = 0;
 
-    partsPrice = preDiscount + discount;
-  }
-
-  switch (reg) {
-    case "opt1":
-      calcPriceDisc(numQtd, 1.2);
-      break;
-    case "opt2":
-      calcPriceDisc(numQtd, 1.3);
-      break;
-    case "opt3":
-      calcPriceDisc(numQtd, 1.5);
-      break;
-    default:
-      partsPrice = numQtd;
+  if (numQtd > 1000) {
+    const normalUnits = 1000 * basePrice;
+    const extraUnits = (numQtd - 1000) * (basePrice * 0.88);
+    partsPrice = normalUnits;
+    +extraUnits;
+  } else {
+    partsPrice = numQtd * basePrice;
   }
 
   let distPrice = numDist * gas;
@@ -176,12 +140,12 @@ function generateReport(list) {
 
     if (order.orderTotal > expensive) {
       expensive = order.orderTotal;
-      expensiveOrder = { code: order.id, total: formatPrice(order.orderTotal) };
+      expensiveOrder = { code: order.id, total: order.orderTotal };
     }
 
     if (order.orderTotal < cheap) {
       cheap = order.orderTotal;
-      cheapestOrder = { code: order.id, total: formatPrice(order.orderTotal) };
+      cheapestOrder = { code: order.id, total: order.orderTotal };
     }
   }
 
@@ -189,13 +153,27 @@ function generateReport(list) {
 
   return {
     total: list.length,
-    mediumPerOrder: formatPrice(mediumOrders),
+    mediumPerOrder: mediumOrders,
     totalPerRegion: {
-      southeast: formatPrice(totalRegion1),
-      south: formatPrice(totalRegion2),
-      midwest: formatPrice(totalRegion3),
+      southeast: totalRegion1,
+      south: totalRegion2,
+      midwest: totalRegion3,
     },
     expensiveOrder,
     cheapestOrder,
   };
+}
+
+function renderReport(report) {
+  const total = document.getElementById("total");
+  const mediumPerOrder = document.getElementById("mediumPerOrder");
+  const totalPerRegion = document.getElementById("totalPerRegion");
+  const expensiveOrder = document.getElementById("expensiveOrder");
+  const cheapestOrder = document.getElementById("cheapestOrder");
+
+  total.innerText = report.total;
+  mediumPerOrder.innerText = formatPrice(report.mediumPerOrder);
+  totalPerRegion.innerText = `Sudeste: ${formatPrice(report.totalPerRegion.southeast)}, Sul: ${formatPrice(report.totalPerRegion.south)}, Centro-Oeste: ${formatPrice(report.totalPerRegion.midwest)}`;
+  expensiveOrder.innerText = `Código: ${report.expensiveOrder.code}; Total gasto: ${formatPrice(report.expensiveOrder.total)}`;
+  cheapestOrder.innerText = `Código: ${report.cheapestOrder.code}; Total gasto: ${formatPrice(report.cheapestOrder.total)}`;
 }
