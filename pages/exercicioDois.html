@@ -1,5 +1,5 @@
 <div class="main-content__container">
-  <h1>Cálculo de salário</h1>
+  <h1>Cálculo de salário de funcionários</h1>
 
   <section class="ex__container" id="sectionForms">
     <div class="form__container" id="settingsFormContainer">
@@ -59,25 +59,12 @@
         <custom-input
           name="emp_performance"
           title="Avaliação de desempenho mensal"
-          type="number"
-        ></custom-input>
-
-        <custom-input
-          name="emp_hours_value"
-          title="Valor da hora trabalhada"
-          type="select"
-          options="Funcionário | Matutino, Funcionário | Vespertino, Funcionário | Noturno, Gerente | Matutino, Gerente | Vespertino, Gerente | Norturno"
+          type="text"
         ></custom-input>
 
         <custom-input
           name="emp_food"
           title="Auxílio alimentação"
-          type="number"
-        ></custom-input>
-
-        <custom-input
-          name="emp_bonus"
-          title="Bônus do desempenho"
           type="number"
         ></custom-input>
 
@@ -91,7 +78,45 @@
     </div>
   </section>
 
-  <section class="hideComponent" id="sectionReports">
+  <section class="hideComponent section-reports" id="sectionReports">
     <h2>Relatório:</h2>
+    <ul>
+      <li>
+        Quantidade total de funcionários cadastrados: <span id="total"></span>
+      </li>
+      <li>
+        Média salarial geral dos funcionários cadastrados:
+        <span id="mediumWage"></span>
+      </li>
+      <li>Média Salarial Funcionários: <span id="mediumWageE"></span></li>
+      <li>Média Salarial Gerentes: <span id="mediumWageM"></span></li>
+      <li>
+        Funcionário mais pago:
+        <div>
+          <p>Código: <span id="highId"></span></p>
+          <p>Categoria: <span id="highCategory"></span></p>
+          <p>Turno: <span id="highShift"></span></p>
+          <p>Valor Recebido: <span id="highWage"></span></p>
+        </div>
+      </li>
+      <li>
+        Funcionário menos pago:
+        <div>
+          <p>Código: <span id="lowId"></span></p>
+          <p>Categoria: <span id="lowCategory"></span></p>
+          <p>Turno: <span id="lowShift"></span></p>
+          <p>Valor Recebido: <span id="lowWage"></span></p>
+        </div>
+      </li>
+      <li>
+        Quantidade de funcionários que receberam cada faixa de bônus:
+        <div>
+          <p>Bônus 10%: <span id="bonus10"></span></p>
+          <p>Bônus 5%: <span id="bonus5"></span></p>
+          <p>Bônus 2%: <span id="bonus2"></span></p>
+          <p>Sem bônus: <span id="bonus0"></span></p>
+        </div>
+      </li>
+    </ul>
   </section>
 </div>
