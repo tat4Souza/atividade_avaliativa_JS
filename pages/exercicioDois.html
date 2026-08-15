@@ -31,39 +31,39 @@
 
       <form id="employeesForm">
         <custom-input
-          name="emp_code"
+          name="emp-id"
           title="Código do Funcionário"
           type="text"
         ></custom-input>
 
         <custom-input
-          name="emp_hours"
+          name="emp-hours"
           title="Horas trabalhadas no mês"
           type="text"
         ></custom-input>
 
         <custom-input
-          name="emp_category"
+          name="emp-cat"
           title="Categoria"
           type="select"
           options="Funcionário Operacional, Gerente"
         ></custom-input>
 
         <custom-input
-          name="emp_shift"
+          name="emp-shift"
           title="Turno"
           type="select"
           options="Matutino, Vespertino, Noturno"
         ></custom-input>
 
         <custom-input
-          name="emp_performance"
+          name="emp-perf"
           title="Avaliação de desempenho mensal"
           type="text"
         ></custom-input>
 
         <custom-input
-          name="emp_food"
+          name="emp-food"
           title="Auxílio alimentação"
           type="number"
         ></custom-input>
@@ -82,39 +82,40 @@
     <h2>Relatório:</h2>
     <ul>
       <li>
-        Quantidade total de funcionários cadastrados: <span id="total"></span>
+        Quantidade total de funcionários cadastrados:
+        <span id="rep-total"></span>
       </li>
       <li>
         Média salarial geral dos funcionários cadastrados:
-        <span id="mediumWage"></span>
+        <span id="rep-wage-avg"></span>
       </li>
-      <li>Média Salarial Funcionários: <span id="mediumWageE"></span></li>
-      <li>Média Salarial Gerentes: <span id="mediumWageM"></span></li>
+      <li>Média Salarial Funcionários: <span id="rep-wage-e"></span></li>
+      <li>Média Salarial Gerentes: <span id="rep-wage-m"></span></li>
       <li>
         Funcionário mais pago:
         <div>
-          <p>Código: <span id="highId"></span></p>
-          <p>Categoria: <span id="highCategory"></span></p>
-          <p>Turno: <span id="highShift"></span></p>
-          <p>Valor Recebido: <span id="highWage"></span></p>
+          <p>Código: <span id="rep-high-id"></span></p>
+          <p>Categoria: <span id="rep-high-cat"></span></p>
+          <p>Turno: <span id="rep-high-shift"></span></p>
+          <p>Valor Recebido: <span id="rep-high-wage"></span></p>
         </div>
       </li>
       <li>
         Funcionário menos pago:
         <div>
-          <p>Código: <span id="lowId"></span></p>
-          <p>Categoria: <span id="lowCategory"></span></p>
-          <p>Turno: <span id="lowShift"></span></p>
-          <p>Valor Recebido: <span id="lowWage"></span></p>
+          <p>Código: <span id="rep-low-id"></span></p>
+          <p>Categoria: <span id="rep-low-cat"></span></p>
+          <p>Turno: <span id="rep-low-shift"></span></p>
+          <p>Valor Recebido: <span id="rep-low-wage"></span></p>
         </div>
       </li>
       <li>
         Quantidade de funcionários que receberam cada faixa de bônus:
         <div>
-          <p>Bônus 10%: <span id="bonus10"></span></p>
-          <p>Bônus 5%: <span id="bonus5"></span></p>
-          <p>Bônus 2%: <span id="bonus2"></span></p>
-          <p>Sem bônus: <span id="bonus0"></span></p>
+          <p>Bônus 10%: <span id="rep-bonus-10"></span></p>
+          <p>Bônus 5%: <span id="rep-bonus-5"></span></p>
+          <p>Bônus 2%: <span id="rep-bonus-2"></span></p>
+          <p>Sem bônus: <span id="rep-bonus-0"></span></p>
         </div>
       </li>
     </ul>

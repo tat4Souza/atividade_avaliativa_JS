@@ -1,112 +1,128 @@
+import { renderReportTemplate } from "../utils/reportTemplate.js";
+import {
+  formRegistrationTemplate,
+  formSettingTemplate,
+  handleFinishForms,
+} from "../utils/formTemplate.js";
 import {
   alterComponentVisibility,
   formatPrice,
   showMessage,
+  formatCategory,
+  formatShift,
 } from "../utils/helpers.js";
 
+const renderProperties = [
+  { htmlId: "rep-total", data: "total" },
+  { htmlId: "rep-wage-avg", data: "mediumWages", formatFunc: formatPrice },
+  { htmlId: "rep-wage-e", data: "mediumWagesE", formatFunc: formatPrice },
+  { htmlId: "rep-wage-m", data: "mediumWagesM", formatFunc: formatPrice },
+  { htmlId: "rep-high-id", data: (report) => report.highestWage.code },
+  {
+    htmlId: "rep-high-cat",
+    data: (report) => report.highestWage.category,
+    formatFunc: formatCategory,
+  },
+  {
+    htmlId: "rep-high-shift",
+    data: (report) => report.highestWage.shift,
+    formatFunc: formatShift,
+  },
+  {
+    htmlId: "rep-high-wage",
+    data: (report) => report.highestWage.wage,
+    formatFunc: formatPrice,
+  },
+  { htmlId: "rep-low-id", data: (report) => report.lowestWage.code },
+  {
+    htmlId: "rep-low-cat",
+    data: (report) => report.lowestWage.category,
+    formatFunc: formatCategory,
+  },
+  {
+    htmlId: "rep-low-shift",
+    data: (report) => report.lowestWage.shift,
+    formatFunc: formatShift,
+  },
+  {
+    htmlId: "rep-low-wage",
+    data: (report) => report.lowestWage.wage,
+    formatFunc: formatPrice,
+  },
+  { htmlId: "rep-bonus-10", data: "bonus10" },
+  { htmlId: "rep-bonus-5", data: "bonus5" },
+  { htmlId: "rep-bonus-2", data: "bonus2" },
+  { htmlId: "rep-bonus-0", data: "bonus0" },
+];
+
 export function init() {
-  const settingsFormContainer = document.getElementById(
-    "settingsFormContainer",
-  );
-  const employeeFormContainer = document.getElementById(
-    "employeeFormContainer",
-  );
-  const employeesForm = document.getElementById("employeesForm");
+  const setContainer = document.getElementById("settingsFormContainer");
+  const empContainer = document.getElementById("employeeFormContainer");
+  const empForm = document.getElementById("employeesForm");
 
   const sectionForms = document.getElementById("sectionForms");
   const sectionReports = document.getElementById("sectionReports");
 
-  const settingsMessage = document.getElementById("formMessageSetting");
-  const employeesMessage = document.getElementById("formMessageEmployee");
+  const setMessage = document.getElementById("formMessageSetting");
+  const empMessage = document.getElementById("formMessageEmployee");
 
-  const btnFinishForm = document.getElementById("btnFinishForm");
+  const btnReport = document.getElementById("btnFinishForm");
 
   let minWageValue = 0;
-  let isFinished = false;
   const employeesList = [];
 
-  settingsFormContainer.addEventListener("submit", (e) => {
-    e.preventDefault();
+  const setupConfig = {
+    minWage: { htmlId: "minWage", type: "number" },
+  };
 
-    const minWage = document.getElementById("minWage").value;
+  const registrationConfig = {
+    fields: {
+      id: { htmlId: "emp-id" },
+      hours: { htmlId: "emp-hours" },
+      category: { htmlId: "emp-cat" },
+      shift: { htmlId: "emp-shift" },
+      bonus: { htmlId: "emp-perf", required: "avaliação" },
+      food: { htmlId: "emp-food" },
+    },
+    calculate: (data) => ({
+      ...data,
+      finalWage: calcWage(
+        minWageValue,
+        data.hours,
+        data.category,
+        data.shift,
+        data.food,
+        data.bonus,
+      ),
+    }),
+  };
 
-    if (minWage === "") {
-      showMessage(
-        settingsMessage,
-        "Por favor, digite um salário mínimo para prosseguir!",
-      );
-      return;
-    }
+  formSettingTemplate(
+    setupConfig,
+    setContainer,
+    empContainer,
+    setMessage,
+    (data) => {
+      minWageValue = parseFloat(data.minWage);
+    },
+  );
 
-    alterComponentVisibility(settingsFormContainer, employeeFormContainer);
+  formRegistrationTemplate(
+    registrationConfig,
+    empForm,
+    empMessage,
+    employeesList,
+  );
 
-    minWageValue = minWage;
-  });
-
-  if (btnFinishForm) {
-    btnFinishForm.addEventListener("click", () => {
-      alterComponentVisibility(sectionForms, sectionReports);
-      isFinished = true;
-    });
-  }
-
-  employeeFormContainer.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const employeeData = {
-      id: document.getElementById("emp_code").value.trim(),
-      hours: document.getElementById("emp_hours").value,
-      category: document.getElementById("emp_category").value,
-      shift: document.getElementById("emp_shift").value,
-      bonus: document.getElementById("emp_performance").value,
-      food: document.getElementById("emp_food").value,
-      get finalWage() {
-        return calcWage(
-          minWageValue,
-          this.hours,
-          this.category,
-          this.shift,
-          this.food,
-          this.bonus,
-        );
-      },
-    };
-
-    if (employeesList.some((employee) => employee.id === employeeData.id)) {
-      showMessage(employeesMessage, "Um funcionário com esse id já existe!");
-      return;
-    }
-
-    if (employeeData.bonus === "") {
-      showMessage(
-        employeesMessage,
-        "Por favor, preencha a avaliação de performance!",
-      );
-      return;
-    }
-
-    employeesList.push(employeeData);
-    employeesForm.reset();
-    employeesMessage.classList.remove("viewComponent");
-    employeesMessage.classList.add("hideComponent");
-  });
-
-  if (btnFinishForm) {
-    btnFinishForm.addEventListener("click", () => {
-      if (employeesList.length === 0) {
-        showMessage(
-          employeesMessage,
-          "Cadastre pelo menos um funcionário antes de gerar o relatório!",
-        );
-        return;
-      }
-
-      alterComponentVisibility(sectionForms, sectionReports);
-
-      const finalReport = generateReport(employeesList);
-      renderReport(finalReport);
-    });
-  }
+  handleFinishForms(
+    btnReport,
+    employeesList,
+    empMessage,
+    sectionForms,
+    sectionReports,
+    generateReport,
+    renderProperties,
+  );
 }
 
 function calcWage(minWage, hours, selectedCatgory, selectedShift, food, bonus) {
@@ -228,62 +244,4 @@ function generateReport(list) {
     bonus2,
     bonus0,
   };
-}
-
-function renderReport(report) {
-  const total = document.getElementById("total");
-  const mediumWage = document.getElementById("mediumWage");
-  const mediumWageE = document.getElementById("mediumWageE");
-  const mediumWageM = document.getElementById("mediumWageM");
-
-  const highId = document.getElementById("highId");
-  const highCategory = document.getElementById("highCategory");
-  const highShift = document.getElementById("highShift");
-  const highWage = document.getElementById("highWage");
-
-  const lowId = document.getElementById("lowId");
-  const lowCategory = document.getElementById("lowCategory");
-  const lowShift = document.getElementById("lowShift");
-  const lowWage = document.getElementById("lowWage");
-
-  const bonus10 = document.getElementById("bonus10");
-  const bonus5 = document.getElementById("bonus5");
-  const bonus2 = document.getElementById("bonus2");
-  const bonus0 = document.getElementById("bonus0");
-
-  total.innerText = report.total;
-  mediumWage.innerText = formatPrice(report.mediumWages);
-  mediumWageE.innerText = formatPrice(report.mediumWagesE);
-  mediumWageM.innerText = formatPrice(report.mediumWagesM);
-
-  highId.innerText = report.highestWage.code;
-  highCategory.innerText =
-    report.highestWage.category === "opt1"
-      ? "Funcionário Operacional"
-      : "Gerente";
-  highShift.innerText =
-    report.highestWage.shift === "opt1"
-      ? "Matutino"
-      : report.highestWage.shift === "opt2"
-        ? "Vespertino"
-        : "Noturno";
-  highWage.innerText = formatPrice(report.highestWage.wage);
-
-  lowId.innerText = report.lowestWage.code;
-  lowCategory.innerText =
-    report.lowestWage.category === "opt1"
-      ? "Funcionário Operacional"
-      : "Gerente";
-  lowShift.innerText =
-    report.lowestWage.shift === "opt1"
-      ? "Matutino"
-      : report.lowestWage.shift === "opt2"
-        ? "Vespertino"
-        : "Noturno";
-  lowWage.innerText = formatPrice(report.lowestWage.wage);
-
-  bonus10.innerText = report.bonus10;
-  bonus5.innerText = report.bonus5;
-  bonus2.innerText = report.bonus2;
-  bonus0.innerText = report.bonus0;
 }

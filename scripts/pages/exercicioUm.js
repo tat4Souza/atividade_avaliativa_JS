@@ -1,3 +1,4 @@
+import { formSettingTemplate } from "../utils/formTemplate.js";
 import {
   showMessage,
   alterComponentVisibility,
@@ -20,25 +21,21 @@ export function init() {
   let currentOrder = 1;
   const ordersList = [];
 
-  settingsFormContainer.addEventListener("submit", (e) => {
-    e.preventDefault();
+  const setupConfig = {
+    gas: { htmlId: "gas", type: "number" },
+    orders: { htmlId: "orders", type: "number" },
+  };
 
-    const gas = document.getElementById("gas").value;
-    const orders = document.getElementById("orders").value;
-
-    if (gas === "" || orders === "") {
-      showMessage(
-        settingsMessage,
-        "Por favor, preencha as informações para prosseguir!",
-      );
-      return;
-    }
-
-    alterComponentVisibility(settingsFormContainer, ordersFormContainer);
-
-    totalOrders = orders;
-    gasPrice = gas;
-  });
+  formSettingTemplate(
+    setupConfig,
+    settingsFormContainer,
+    ordersFormContainer,
+    settingsMessage,
+    (data) => {
+      gasPrice = parseFloat(data.gas);
+      totalOrders = parseInt(data.orders);
+    },
+  );
 
   ordersFormContainer.addEventListener("submit", (e) => {
     e.preventDefault();
