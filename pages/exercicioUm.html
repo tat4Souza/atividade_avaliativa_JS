@@ -11,12 +11,6 @@
           type="number"
         ></custom-input>
 
-        <custom-input
-          name="orders"
-          title="Quantidade de pedidos a serem feitos"
-          type="number"
-        ></custom-input>
-
         <label
           id="formMessageSetting"
           class="hideComponent form-message"
@@ -27,35 +21,41 @@
     </div>
 
     <div class="form__container hideComponent" id="ordersFormContainer">
-      <p>Para cadastrar o pedido, por favor preencha abaixo:</p>
+      <div class="form__header">
+        <p>
+          Preencha as informações dos pedidos e, quando estiver pronto, clique
+          no botão ao lado:
+        </p>
+        <button class="form__btn" id="btnFinishForm">Gerar relatório</button>
+      </div>
       <form id="ordersForm">
         <custom-input
-          name="ord_id"
+          name="ord-id"
           title="Código do pedido"
           type="text"
         ></custom-input>
 
         <custom-input
-          name="ord_region"
+          name="ord-region"
           title="Região"
           type="select"
           options="Sudeste (R$ 1.20 por peça), Sul (R$ 1.30 por peça), Centro-Oeste (R$ 1.50 por peça)"
         ></custom-input>
 
         <custom-input
-          name="ord_distance"
+          name="ord-distance"
           title="Distância (em km)"
           type="number"
         ></custom-input>
 
         <custom-input
-          name="ord_qtd_parts"
+          name="ord-qtd-parts"
           title="Quantidade de peças"
           type="number"
         ></custom-input>
 
         <custom-input
-          name="ord_tracking"
+          name="ord-tracking"
           title="Rastreamento (R$ 200)"
           type="checkbox"
         ></custom-input>
@@ -70,18 +70,29 @@
   <section id="sectionReports" class="hideComponent section-reports">
     <h2>Relatório</h2>
     <ul>
-      <li>Número total de pedidos realizados: <span id="total"></span></li>
-      <li>Valor médio pago por pedido: <span id="mediumPerOrder"></span></li>
+      <li>Número total de pedidos realizados: <span id="rep-total"></span></li>
+      <li>Valor médio pago por pedido: <span id="rep-order-avg"></span></li>
       <li>
-        Valor total acumulado em cada região: <span id="totalPerRegion"></span>
+        Valor por região:
+        <div>
+          <p>Sudeste: <span id="rep-reg-se"></span></p>
+          <p>Sul: <span id="rep-reg-s"></span></p>
+          <p>Centro-Oeste: <span id="rep-reg-m"></span></p>
+        </div>
       </li>
       <li>
-        Código e valor total pago pelo pedido mais caro:
-        <span id="expensiveOrder"></span>
+        Pedido mais caro:
+        <div>
+          <p>Código: <span id="rep-exp-id"></span></p>
+          <p>Valor Total pago: <span id="rep-exp-tot"></span></p>
+        </div>
       </li>
       <li>
-        Código e valor total pego pelo pedido mais barato:
-        <span id="cheapestOrder"></span>
+        Pedido mais barato:
+        <div>
+          <p>Código: <span id="rep-che-id"></span></p>
+          <p>Valor Total pago: <span id="rep-che-tot"></span></p>
+        </div>
       </li>
     </ul>
   </section>

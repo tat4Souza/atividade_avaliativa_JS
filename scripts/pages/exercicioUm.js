@@ -1,78 +1,120 @@
-import { formSettingTemplate } from "../utils/formTemplate.js";
+import {
+  formRegistrationTemplate,
+  formSettingTemplate,
+  handleFinishForms,
+} from "../utils/formTemplate.js";
 import {
   showMessage,
   alterComponentVisibility,
   formatPrice,
 } from "../utils/helpers.js";
 
+const renderProperties = [
+  { htmlId: "rep-total", data: "total" },
+  { htmlId: "rep-order-avg", data: "mediumPerOrder", formatFunc: formatPrice },
+  {
+    htmlId: "rep-reg-se",
+    data: (report) => report.totalPerRegion.southeast,
+    formatFunc: formatPrice,
+  },
+  {
+    htmlId: "rep-reg-s",
+    data: (report) => report.totalPerRegion.south,
+    formatFunc: formatPrice,
+  },
+  {
+    htmlId: "rep-reg-m",
+    data: (report) => report.totalPerRegion.midwest,
+    formatFunc: formatPrice,
+  },
+  {
+    htmlId: "rep-exp-id",
+    data: (report) => report.expensiveOrder.code,
+    formatFunc: formatPrice,
+  },
+  {
+    htmlId: "rep-exp-tot",
+    data: (report) => report.expensiveOrder.total,
+    formatFunc: formatPrice,
+  },
+  {
+    htmlId: "rep-che-id",
+    data: (report) => report.cheapestOrder.code,
+    formatFunc: formatPrice,
+  },
+  {
+    htmlId: "rep-che-tot",
+    data: (report) => report.cheapestOrder.total,
+    formatFunc: formatPrice,
+  },
+];
+
 export function init() {
-  const settingsFormContainer = document.getElementById(
-    "settingsFormContainer",
-  );
-  const ordersFormContainer = document.getElementById("ordersFormContainer");
+  const setContainer = document.getElementById("settingsFormContainer");
+  const ordContainer = document.getElementById("ordersFormContainer");
   const ordersForms = document.getElementById("ordersForm");
+
   const sectionReports = document.getElementById("sectionReports");
   const sectionForm = document.getElementById("sectionForms");
+
   const settingsMessage = document.getElementById("formMessageSetting");
   const ordersMessage = document.getElementById("formMessageOrder");
 
+  const btnReport = document.getElementById("btnFinishForm");
+
   let gasPrice = 0;
-  let totalOrders = 0;
-  let currentOrder = 1;
   const ordersList = [];
 
   const setupConfig = {
-    gas: { htmlId: "gas", type: "number" },
-    orders: { htmlId: "orders", type: "number" },
+    gas: { htmlId: "gas" },
+  };
+
+  const registrationConfig = {
+    fields: {
+      id: { htmlId: "ord-id" },
+      region: { htmlId: "ord-region" },
+      distance: { htmlId: "ord-distance" },
+      quantity: { htmlId: "ord-qtd-parts" },
+      hasTracking: { htmlId: "ord-tracking", type: "checkbox" },
+    },
+    calculate: (data) => ({
+      ...data,
+      orderTotal: calcOrderTotal(
+        data.quantity,
+        data.region,
+        data.distance,
+        data.hasTracking,
+        gasPrice,
+      ),
+    }),
   };
 
   formSettingTemplate(
     setupConfig,
-    settingsFormContainer,
-    ordersFormContainer,
+    setContainer,
+    ordContainer,
     settingsMessage,
     (data) => {
       gasPrice = parseFloat(data.gas);
-      totalOrders = parseInt(data.orders);
     },
   );
 
-  ordersFormContainer.addEventListener("submit", (e) => {
-    e.preventDefault();
+  formRegistrationTemplate(
+    registrationConfig,
+    ordersForms,
+    ordersMessage,
+    ordersList,
+  );
 
-    const orderData = {
-      id: document.getElementById("ord_id").value.trim(),
-      region: document.getElementById("ord_region").value,
-      distance: document.getElementById("ord_distance").value,
-      quantity: document.getElementById("ord_qtd_parts").value,
-      hasTracking: document.getElementById("ord_tracking").checked,
-      get orderTotal() {
-        return calcOrderTotal(
-          this.quantity,
-          this.region,
-          this.distance,
-          this.hasTracking,
-          gasPrice,
-        );
-      },
-    };
-
-    if (ordersList.some((order) => order.id === orderData.id)) {
-      showMessage(ordersMessage, "Um pedido com esse id já existe!");
-      return;
-    }
-
-    ordersList.push(orderData);
-
-    if (currentOrder < totalOrders) {
-      currentOrder++;
-      ordersForm.reset();
-    } else {
-      alterComponentVisibility(sectionForms, sectionReports);
-      const finalReport = generateReport(ordersList);
-      renderReport(finalReport);
-    }
-  });
+  handleFinishForms(
+    btnReport,
+    ordersList,
+    ordersMessage,
+    sectionForm,
+    sectionReports,
+    generateReport,
+    renderProperties,
+  );
 }
 
 function calcOrderTotal(qtd, reg, dist, track, gas) {
@@ -148,18 +190,4 @@ function generateReport(list) {
     expensiveOrder,
     cheapestOrder,
   };
-}
-
-function renderReport(report) {
-  const total = document.getElementById("total");
-  const mediumPerOrder = document.getElementById("mediumPerOrder");
-  const totalPerRegion = document.getElementById("totalPerRegion");
-  const expensiveOrder = document.getElementById("expensiveOrder");
-  const cheapestOrder = document.getElementById("cheapestOrder");
-
-  total.innerText = report.total;
-  mediumPerOrder.innerText = formatPrice(report.mediumPerOrder);
-  totalPerRegion.innerText = `Sudeste: ${formatPrice(report.totalPerRegion.southeast)}, Sul: ${formatPrice(report.totalPerRegion.south)}, Centro-Oeste: ${formatPrice(report.totalPerRegion.midwest)}`;
-  expensiveOrder.innerText = `Código: ${report.expensiveOrder.code}; Total gasto: ${formatPrice(report.expensiveOrder.total)}`;
-  cheapestOrder.innerText = `Código: ${report.cheapestOrder.code}; Total gasto: ${formatPrice(report.cheapestOrder.total)}`;
 }
