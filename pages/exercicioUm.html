@@ -5,19 +5,17 @@
     <div class="form__container" id="settingsFormContainer">
       <p>Para prosseguir aos pedidos, insira as informações abaixo:</p>
       <form>
-        <div class="form__input-label">
-          <label for="gas">Valor do combustível por Litro:</label>
-          <input type="number" id="gas" placeholder="Valor Combustível" />
-        </div>
+        <custom-input
+          name="gas"
+          title="Valor do combustível por Litro"
+          type="number"
+        ></custom-input>
 
-        <div class="form__input-label">
-          <label for="orders">Quantidade de pedidos a serem feitos:</label>
-          <input
-            type="number"
-            id="orders"
-            placeholder="Quantidade de Pedidos"
-          />
-        </div>
+        <custom-input
+          name="orders"
+          title="Quantidade de pedidos a serem feitos"
+          type="number"
+        ></custom-input>
 
         <label
           id="formMessageSetting"
@@ -31,49 +29,36 @@
     <div class="form__container hideComponent" id="ordersFormContainer">
       <p>Para cadastrar o pedido, por favor preencha abaixo:</p>
       <form id="ordersForm">
-        <div class="form__input-label">
-          <label for="ord_id">Código do pedido:</label>
-          <input type="text" id="ord_id" placeholder="Código do Pedido" />
-        </div>
+        <custom-input
+          name="ord_id"
+          title="Código do pedido"
+          type="text"
+        ></custom-input>
 
-        <div class="form__input-label">
-          <label for="ord_region">Região:</label>
-          <select
-            name="region"
-            id="ord_region"
-            aria-placeholder="Selecione uma região"
-          >
-            <option value="opt1">Sudeste (R$ 1,20 por peça)</option>
-            <option value="opt2">Sul (R$ 1,30 por peça)</option>
-            <option value="opt3">Centro-Oeste (R$ 1,50 por peça)</option>
-          </select>
-        </div>
+        <custom-input
+          name="ord_region"
+          title="Região"
+          type="select"
+          options="Sudeste (R$ 1.20 por peça), Sul (R$ 1.30 por peça), Centro-Oeste (R$ 1.50 por peça)"
+        ></custom-input>
 
-        <div class="form__input-label">
-          <label for="ord_distance">Distância (em Km):</label>
-          <input
-            type="number"
-            id="ord_distance"
-            placeholder="Distância a percorrer"
-          />
-        </div>
+        <custom-input
+          name="ord_distance"
+          title="Distância (em km)"
+          type="number"
+        ></custom-input>
 
-        <div class="form__input-label">
-          <label for="ord_qtd_parts">Quantidade de pecas:</label>
-          <input type="number" id="ord_qtd_parts" placeholder="Quantidade" />
-        </div>
+        <custom-input
+          name="ord_qtd_parts"
+          title="Quantidade de peças"
+          type="number"
+        ></custom-input>
 
-        <div class="form__input-label form__input-label--switch">
-          <label for="ord_tracking">
-            Rastreamento (R$ 200):
-            <input
-              type="checkbox"
-              role="switch"
-              id="ord_tracking"
-              placeholder="Quantidade"
-            />
-          </label>
-        </div>
+        <custom-input
+          name="ord_tracking"
+          title="Rastreamento (R$ 200)"
+          type="checkbox"
+        ></custom-input>
 
         <label id="formMessageOrder" class="hideComponent form-message"></label>
 

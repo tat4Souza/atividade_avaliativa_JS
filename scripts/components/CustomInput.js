@@ -31,6 +31,9 @@ export class CustomInput extends HTMLElement {
     };
 
     this.classList.add("form__input-label");
+    if (type == "checkbox") {
+      this.classList.add("form__input-label--switch");
+    }
     this.innerHTML = `
       
           <label for="${inputId}">${title}:</label>

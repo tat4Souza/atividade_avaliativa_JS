@@ -90,8 +90,7 @@ function calcOrderTotal(qtd, reg, dist, track, gas) {
   if (numQtd > 1000) {
     const normalUnits = 1000 * basePrice;
     const extraUnits = (numQtd - 1000) * (basePrice * 0.88);
-    partsPrice = normalUnits;
-    +extraUnits;
+    partsPrice = normalUnits + extraUnits;
   } else {
     partsPrice = numQtd * basePrice;
   }

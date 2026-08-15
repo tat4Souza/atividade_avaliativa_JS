@@ -46,8 +46,12 @@
 }
 
 .form__input-label--switch input {
-  display: flex;
   width: auto;
+}
+
+.form__input-label--switch {
+  flex-direction: row;
+  align-items: center;
 }
 
 .form__btn {
