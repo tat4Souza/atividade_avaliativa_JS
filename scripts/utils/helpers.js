@@ -14,6 +14,23 @@ export function formatShift(shift) {
       : "Noturno";
 }
 
+export function formatProductInfo(products) {
+  if (!Array.isArray(products) || products.length === 0) {
+    return "<p>Nenhum produto registrado.</p>";
+  }
+
+  return products
+    .map(
+      (item) => `
+        <div>
+          <p><strong>Código:</strong> ${item.id}</p>
+          <p><strong>Estoque final:</strong> ${item.totalStock}</p>
+          <p><strong>Valor investido:</strong> ${formatPrice(item.totalValue)}</p>
+        </div>`,
+    )
+    .join("");
+}
+
 export function alterComponentVisibility(hiddenComponent, visibleComponent) {
   hiddenComponent.classList.remove("viewComponent");
   hiddenComponent.classList.add("hideComponent");

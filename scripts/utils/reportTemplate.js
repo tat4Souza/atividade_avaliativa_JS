@@ -13,6 +13,6 @@ export function renderReportTemplate(dataObj, renderProperties) {
         ? config.formatFunc(value)
         : (value ?? "Não definido");
 
-    element.innerText = finalValue;
+    element.innerHTML = finalValue;
   }
 }

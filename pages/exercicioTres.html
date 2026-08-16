@@ -1,7 +1,100 @@
 <div class="main-content__container">
-  <h1>Exercício Três</h1>
+  <h1>Controle de Produção e Estoque</h1>
 
-  <section>
-    <p>Na espera de formulário com as instruções do exercício...🚧</p>
+  <section class="ex__container" id="sectionForms">
+    <div class="form__container">
+      <div class="form__header">
+        <p>
+          Preencha as informações das ordens e, quando estiver pronto, clique no
+          botão ao lado:
+        </p>
+        <button class="form__btn" id="btnFinishForm">Gerar relatório</button>
+      </div>
+      <form id="stockForm">
+        <custom-input
+          name="sto-ord-id"
+          title="Código da Ordem"
+          type="text"
+        ></custom-input>
+
+        <custom-input
+          name="sto-prod-id"
+          title="Código do Produto"
+          type="text"
+        ></custom-input>
+
+        <custom-input
+          name="sto-prod-type"
+          title="Tipo do Produto"
+          type="select"
+          options="Padrão, Premium, Sob encomenda"
+        ></custom-input>
+
+        <custom-input
+          name="sto-qtd"
+          title="Quantidade produzida"
+          type="number"
+        ></custom-input>
+
+        <custom-input
+          name="sto-prod-price"
+          title="Custo unitário"
+          type="text"
+        ></custom-input>
+
+        <custom-input
+          name="sto-initial"
+          title="Estoque inicial"
+          type="number"
+        ></custom-input>
+
+        <label id="formMessage" class="hideComponent form-message"></label>
+
+        <button type="submit" class="form__btn">Prosseguir</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="hideComponent section-reports" id="sectionReports">
+    <h2>Relatório</h2>
+    <ul>
+      <li>Total de ordens registradas: <span id="rep-total"></span></li>
+      <li>
+        Estoque final dos produtos Padrões: <span id="rep-stock-std"></span>
+      </li>
+      <li>
+        Estoque final dos produtos Premium: <span id="rep-stock-pre"></span>
+      </li>
+      <li>
+        Estoque final dos produtos Sob Encomenda:
+        <span id="rep-stock-cus"></span>
+      </li>
+      <li>Média de custo total: <span id="rep-avg"></span></li>
+      <li>
+        Ordem com maior custo:
+        <div>
+          <p>Código: <span id="rep-high-id"></span></p>
+          <p>Valor Total pago: <span id="rep-high-tot"></span></p>
+        </div>
+      </li>
+      <li>
+        Ordem com menor custo:
+        <div>
+          <p>Código: <span id="rep-low-id"></span></p>
+          <p>Valor Total pago: <span id="rep-low-tot"></span></p>
+        </div>
+      </li>
+      <li>
+        Quantidade de ordens com estoque alto: <span id="rep-alert-high"></span>
+      </li>
+      <li>
+        Quantidade de ordens com estoque crítico:
+        <span id="rep-alert-crit"></span>
+      </li>
+      <li>
+        Informações dos produtos:
+        <div id="rep-prod-info"></div>
+      </li>
+    </ul>
   </section>
 </div>

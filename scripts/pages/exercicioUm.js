@@ -27,21 +27,13 @@ const renderProperties = [
     data: (report) => report.totalPerRegion.midwest,
     formatFunc: formatPrice,
   },
-  {
-    htmlId: "rep-exp-id",
-    data: (report) => report.expensiveOrder.code,
-    formatFunc: formatPrice,
-  },
+  { htmlId: "rep-exp-id", data: (report) => report.expensiveOrder.code },
   {
     htmlId: "rep-exp-tot",
     data: (report) => report.expensiveOrder.total,
     formatFunc: formatPrice,
   },
-  {
-    htmlId: "rep-che-id",
-    data: (report) => report.cheapestOrder.code,
-    formatFunc: formatPrice,
-  },
+  { htmlId: "rep-che-id", data: (report) => report.cheapestOrder.code },
   {
     htmlId: "rep-che-tot",
     data: (report) => report.cheapestOrder.total,
@@ -146,7 +138,7 @@ function generateReport(list) {
   let totalRegion2 = 0;
   let totalRegion3 = 0;
   let expensiveOrder = { code: "", total: 0 };
-  let cheapestOrder = { code: "", total: Infinity };
+  let cheapestOrder = { code: "", total: 0 };
 
   let expensive = 0;
   let cheap = Infinity;
