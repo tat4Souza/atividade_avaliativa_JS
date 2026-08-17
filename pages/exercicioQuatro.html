@@ -1,7 +1,137 @@
 <div class="main-content__container">
-  <h1>Exercício Quatro</h1>
+  <h1>Sistema de Reservas de Hotel com Tarifas Dinâmicas</h1>
 
-  <section>
-    <p>Na espera de formulário com as instruções do exercício...🚧</p>
+  <section class="ex__container" id="sectionForms">
+    <div class="form__container" id="settingsFormContainer">
+      <p>Para prosseguir aos pedidos, insira as informações abaixo:</p>
+      <form>
+        <custom-input
+          name="daily-rate"
+          title="Valor base da diária"
+          type="text"
+        ></custom-input>
+
+        <custom-input
+          name="breakfast"
+          title="Valor base do café da manhã"
+          type="text"
+        ></custom-input>
+
+        <label
+          id="formMessageSetting"
+          class="hideComponent form-message"
+        ></label>
+
+        <button type="submit" class="form__btn">Prosseguir</button>
+      </form>
+    </div>
+
+    <div class="form__container hideComponent" id="reservationFormContainer">
+      <div class="form__header">
+        <p>
+          Preencha as informações dos pedidos e, quando estiver pronto, clique
+          no botão ao lado:
+        </p>
+        <button class="form__btn" id="btnFinishForm">Gerar relatório</button>
+      </div>
+      <form id="reservationForm">
+        <custom-input
+          name="res-id"
+          title="Código de reserva"
+          type="text"
+        ></custom-input>
+
+        <custom-input
+          name="res-type"
+          title="Tipo de quarto"
+          type="select"
+          options="Standard, Luxo, Premium"
+        ></custom-input>
+
+        <custom-input
+          name="res-season"
+          title="Temporada"
+          type="select"
+          options="Baixa, Alta, Feriado"
+        ></custom-input>
+
+        <custom-input
+          name="res-daily"
+          title="Quantidade de diárias"
+          type="number"
+        ></custom-input>
+
+        <custom-input
+          name="res-guests"
+          title="Número de hóspedes"
+          type="number"
+        ></custom-input>
+
+        <custom-input
+          name="res-break"
+          title="Café da manhã"
+          type="checkbox"
+        ></custom-input>
+
+        <label
+          id="formMessageReservation"
+          class="hideComponent form-message"
+        ></label>
+
+        <button type="submit" class="form__btn">Enviar</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="hideComponent section-reports" id="sectionReports">
+    <h2 id="rep-tests">Relatório</h2>
+    <ul>
+      <li>Total de reservas cadastradas <span id="rep-total"></span></li>
+      <li>Valor médio por reserva <span id="rep-avg"></span></li>
+      <li>
+        Valor total por tipo de quarto:
+        <div><strong>Standard: </strong><span id="rep-total-s"></span></div>
+        <div><strong>Luxo: </strong><span id="rep-total-l"></span></div>
+        <div><strong>Premium: </strong><span id="rep-total-p"></span></div>
+      </li>
+      <li>
+        Valor total por temporada:
+        <div><strong>Baixa: </strong><span id="rep-season-l"></span></div>
+        <div><strong>Alta: </strong><span id="rep-season-h"></span></div>
+        <div><strong>Feriado: </strong><span id="rep-season-hd"></span></div>
+      </li>
+      <li>
+        Reserva mais cara:
+        <div><strong>Código: </strong><span id="rep-exp-id"></span></div>
+        <div><strong>Tipo: </strong><span id="rep-exp-type"></span></div>
+        <div><strong>Temporada: </strong><span id="rep-exp-sea"></span></div>
+        <div><strong>Hóspedes: </strong><span id="rep-exp-gue"></span></div>
+        <div><strong>Valor: </strong><span id="rep-exp-tot"></span></div>
+      </li>
+      <li>
+        Reserva mais barata:
+        <div><strong>Código: </strong><span id="rep-cheap-id"></span></div>
+        <div><strong>Tipo: </strong><span id="rep-cheap-type"></span></div>
+        <div><strong>Temporada: </strong><span id="rep-cheap-sea"></span></div>
+        <div><strong>Hóspedes: </strong><span id="rep-cheap-gue"></span></div>
+        <div><strong>Valor: </strong><span id="rep-cheap-tot"></span></div>
+      </li>
+      <li>
+        Quantidade de reservas com café incluso
+        <span id="rep-breakfast-w"></span>
+      </li>
+      <li>
+        Quantidade de reservas sem café incluso
+        <span id="rep-breakfast-wo"></span>
+      </li>
+      <li>
+        Ocupação total
+        <span id="rep-ocupation"></span>
+      </li>
+      <li>
+        Valor médio por hóspede
+        <span id="rep-avg-guest"></span>
+      </li>
+    </ul>
   </section>
 </div>

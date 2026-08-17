@@ -1,36 +1,3 @@
-export function formatPrice(price) {
-  return price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-}
-
-export function formatCategory(category) {
-  return category === "opt1" ? "Funcionário Operacional" : "Gerente";
-}
-
-export function formatShift(shift) {
-  return shift === "opt1"
-    ? "Matutino"
-    : shift === "opt2"
-      ? "Vespertino"
-      : "Noturno";
-}
-
-export function formatProductInfo(products) {
-  if (!Array.isArray(products) || products.length === 0) {
-    return "<p>Nenhum produto registrado.</p>";
-  }
-
-  return products
-    .map(
-      (item) => `
-        <div>
-          <p><strong>Código:</strong> ${item.id}</p>
-          <p><strong>Estoque final:</strong> ${item.totalStock}</p>
-          <p><strong>Valor investido:</strong> ${formatPrice(item.totalValue)}</p>
-        </div>`,
-    )
-    .join("");
-}
-
 export function alterComponentVisibility(hiddenComponent, visibleComponent) {
   hiddenComponent.classList.remove("viewComponent");
   hiddenComponent.classList.add("hideComponent");
@@ -49,4 +16,49 @@ export function showMessage(label, message) {
 export function hideMessage(label) {
   label.classList.remove("viewComponent");
   label.classList.add("hideComponent");
+}
+
+export function sumBy(list, selector) {
+  if (!Array.isArray(list) || list.length === 0) return 0;
+
+  const getValue =
+    typeof selector === "function" ? selector : (item) => item[selector];
+
+  return list.reduce((acc, cur) => acc + Number(getValue(cur)) || 0, 0);
+}
+
+export function avgBy(list, selector, div) {
+  if (!Array.isArray(list) || list.length === 0) return 0;
+
+  const sum = sumBy(list, selector);
+  const divisor = !div ? list.length : div;
+
+  return divisor > 0 ? sum / divisor : 0;
+}
+
+export function countBy(list, selector) {
+  if (!Array.isArray(list)) return 0;
+
+  const item =
+    typeof selector === "function" ? selector : (item) => item[selector];
+
+  return list.filter((cur) => item(cur)).length;
+}
+
+export function extremeBy(list, reference, mode = "max") {
+  if (!Array.isArray(list) || list.length === 0) return null;
+
+  let obj = {};
+
+  if (mode === "max") {
+    obj = list.reduce((max, item) =>
+      item[reference] > max[reference] ? item : max,
+    );
+  } else {
+    obj = list.reduce((min, item) =>
+      item[reference] < min[reference] ? item : min,
+    );
+  }
+
+  return obj;
 }

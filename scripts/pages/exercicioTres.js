@@ -1,8 +1,8 @@
+import { formatPrice, formatProductInfo } from "../utils/formatFunctions.js";
 import {
   formRegistrationTemplate,
   handleFinishForms,
 } from "../utils/formTemplate.js";
-import { formatPrice, formatProductInfo } from "../utils/helpers.js";
 
 const renderProperties = [
   { htmlId: "rep-total", data: "total" },

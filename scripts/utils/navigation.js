@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
         script.init();
       }
     } catch (err) {
-      console.log(`Sem script JS para ${route.file}`);
+      console.log(`Sem script JS para ${route.file}`, err);
     }
   }
 

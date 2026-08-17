@@ -5,12 +5,11 @@ import {
   handleFinishForms,
 } from "../utils/formTemplate.js";
 import {
-  alterComponentVisibility,
-  formatPrice,
-  showMessage,
   formatCategory,
+  formatPrice,
   formatShift,
-} from "../utils/helpers.js";
+} from "../utils/formatFunctions.js";
+import { alterComponentVisibility, showMessage } from "../utils/helpers.js";
 
 const renderProperties = [
   { htmlId: "rep-total", data: "total" },

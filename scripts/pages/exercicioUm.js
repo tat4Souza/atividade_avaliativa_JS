@@ -1,13 +1,9 @@
+import { formatPrice } from "../utils/formatFunctions.js";
 import {
   formRegistrationTemplate,
   formSettingTemplate,
   handleFinishForms,
 } from "../utils/formTemplate.js";
-import {
-  showMessage,
-  alterComponentVisibility,
-  formatPrice,
-} from "../utils/helpers.js";
 
 const renderProperties = [
   { htmlId: "rep-total", data: "total" },
