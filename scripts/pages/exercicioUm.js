@@ -1,55 +1,16 @@
-import { formatPrice } from "../utils/formatFunctions.js";
+import {
+  formatOrdersExtreme,
+  formatOrdersRegion,
+  formatPrice,
+} from "../utils/formatFunctions.js";
 import {
   formRegistrationTemplate,
   formSettingTemplate,
   handleFinishForms,
 } from "../utils/formTemplate.js";
-
-const renderProperties = [
-  { htmlId: "rep-total", data: "total" },
-  { htmlId: "rep-order-avg", data: "mediumPerOrder", formatFunc: formatPrice },
-  {
-    htmlId: "rep-reg-se",
-    data: (report) => report.totalPerRegion.southeast,
-    formatFunc: formatPrice,
-  },
-  {
-    htmlId: "rep-reg-s",
-    data: (report) => report.totalPerRegion.south,
-    formatFunc: formatPrice,
-  },
-  {
-    htmlId: "rep-reg-m",
-    data: (report) => report.totalPerRegion.midwest,
-    formatFunc: formatPrice,
-  },
-  { htmlId: "rep-exp-id", data: (report) => report.expensiveOrder.code },
-  {
-    htmlId: "rep-exp-tot",
-    data: (report) => report.expensiveOrder.total,
-    formatFunc: formatPrice,
-  },
-  { htmlId: "rep-che-id", data: (report) => report.cheapestOrder.code },
-  {
-    htmlId: "rep-che-tot",
-    data: (report) => report.cheapestOrder.total,
-    formatFunc: formatPrice,
-  },
-];
+import { avgBy, extremeBy, sumBy } from "../utils/helpers.js";
 
 export function init() {
-  const setContainer = document.getElementById("settingsFormContainer");
-  const ordContainer = document.getElementById("ordersFormContainer");
-  const ordersForms = document.getElementById("ordersForm");
-
-  const sectionReports = document.getElementById("sectionReports");
-  const sectionForm = document.getElementById("sectionForms");
-
-  const settingsMessage = document.getElementById("formMessageSetting");
-  const ordersMessage = document.getElementById("formMessageOrder");
-
-  const btnReport = document.getElementById("btnFinishForm");
-
   let gasPrice = 0;
   const ordersList = [];
 
@@ -77,32 +38,13 @@ export function init() {
     }),
   };
 
-  formSettingTemplate(
-    setupConfig,
-    setContainer,
-    ordContainer,
-    settingsMessage,
-    (data) => {
-      gasPrice = parseFloat(data.gas);
-    },
-  );
+  formSettingTemplate(setupConfig, (data) => {
+    gasPrice = parseFloat(data.gas);
+  });
 
-  formRegistrationTemplate(
-    registrationConfig,
-    ordersForms,
-    ordersMessage,
-    ordersList,
-  );
+  formRegistrationTemplate(registrationConfig, ordersList);
 
-  handleFinishForms(
-    btnReport,
-    ordersList,
-    ordersMessage,
-    sectionForm,
-    sectionReports,
-    generateReport,
-    renderProperties,
-  );
+  handleFinishForms(ordersList, generateReport, renderProperties);
 }
 
 function calcOrderTotal(qtd, reg, dist, track, gas) {
@@ -129,53 +71,48 @@ function calcOrderTotal(qtd, reg, dist, track, gas) {
 }
 
 function generateReport(list) {
-  let ordersPriceSum = 0;
-  let totalRegion1 = 0;
-  let totalRegion2 = 0;
-  let totalRegion3 = 0;
-  let expensiveOrder = { code: "", total: 0 };
-  let cheapestOrder = { code: "", total: 0 };
-
-  let expensive = 0;
-  let cheap = Infinity;
-
-  for (let order of list) {
-    ordersPriceSum += order.orderTotal;
-
-    switch (order.region) {
-      case "opt1":
-        totalRegion1 += order.orderTotal;
-        break;
-      case "opt2":
-        totalRegion2 += order.orderTotal;
-        break;
-      case "opt3":
-        totalRegion3 += order.orderTotal;
-        break;
-    }
-
-    if (order.orderTotal > expensive) {
-      expensive = order.orderTotal;
-      expensiveOrder = { code: order.id, total: order.orderTotal };
-    }
-
-    if (order.orderTotal < cheap) {
-      cheap = order.orderTotal;
-      cheapestOrder = { code: order.id, total: order.orderTotal };
-    }
+  function sumRegionBy(option) {
+    return sumBy(
+      list.filter((o) => o.region === option),
+      "orderTotal",
+    );
   }
 
-  const mediumOrders = list.length > 0 ? ordersPriceSum / list.length : 0;
+  const mediumPerOrder = avgBy(list, "orderTotal");
+  const totalPerRegion = {
+    southeast: sumRegionBy("opt1"),
+    south: sumRegionBy("opt2"),
+    midwest: sumRegionBy("opt3"),
+  };
+
+  const expensiveOrder = extremeBy(list, "orderTotal");
+  const cheapestOrder = extremeBy(list, "orderTotal", "min");
 
   return {
     total: list.length,
-    mediumPerOrder: mediumOrders,
-    totalPerRegion: {
-      southeast: totalRegion1,
-      south: totalRegion2,
-      midwest: totalRegion3,
-    },
+    mediumPerOrder,
+    totalPerRegion,
     expensiveOrder,
     cheapestOrder,
   };
 }
+
+const renderProperties = [
+  { htmlId: "rep-total", data: "total" },
+  { htmlId: "rep-order-avg", data: "mediumPerOrder", formatFunc: formatPrice },
+  {
+    htmlId: "rep-reg",
+    data: (report) => report.totalPerRegion,
+    formatFunc: formatOrdersRegion,
+  },
+  {
+    htmlId: "rep-exp",
+    data: (report) => report.expensiveOrder,
+    formatFunc: formatOrdersExtreme,
+  },
+  {
+    htmlId: "rep-cheap",
+    data: (report) => report.cheapestOrder,
+    formatFunc: formatOrdersExtreme,
+  },
+];

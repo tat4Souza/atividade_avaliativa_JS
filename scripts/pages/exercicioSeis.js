@@ -15,18 +15,6 @@ import { sumBy, avgBy, countBy, extremeBy } from "../utils/helpers.js";
 let monthlyGoalValue = 0;
 
 export function init() {
-  const setContainer = document.getElementById("settingsFormContainer");
-  const regContainer = document.getElementById("registrationFormContainer");
-  const regForm = document.getElementById("registrationForm");
-
-  const sectionForms = document.getElementById("sectionForms");
-  const sectionReports = document.getElementById("sectionReports");
-
-  const setMessage = document.getElementById("formMessageSetting");
-  const regMessage = document.getElementById("formMessageRegistration");
-
-  const btnReport = document.getElementById("btnFinishForm");
-
   let baseComValue = 0;
   const salesList = [];
 
@@ -54,28 +42,14 @@ export function init() {
     }),
   };
 
-  formSettingTemplate(
-    setupConfig,
-    setContainer,
-    regContainer,
-    setMessage,
-    (data) => {
-      monthlyGoalValue = Number(data.monthlyGoal);
-      baseComValue = Number(data.baseCom);
-    },
-  );
+  formSettingTemplate(setupConfig, (data) => {
+    monthlyGoalValue = Number(data.monthlyGoal);
+    baseComValue = Number(data.baseCom);
+  });
 
-  formRegistrationTemplate(registrationConfig, regForm, regMessage, salesList);
+  formRegistrationTemplate(registrationConfig, salesList);
 
-  handleFinishForms(
-    btnReport,
-    salesList,
-    regMessage,
-    sectionForms,
-    sectionReports,
-    generateReport,
-    renderProperties,
-  );
+  handleFinishForms(salesList, generateReport, renderProperties);
 }
 
 function calcComission(baseComPer, v, ct, r) {

@@ -11,62 +11,7 @@ import {
 } from "../utils/formatFunctions.js";
 import { alterComponentVisibility, showMessage } from "../utils/helpers.js";
 
-const renderProperties = [
-  { htmlId: "rep-total", data: "total" },
-  { htmlId: "rep-wage-avg", data: "mediumWages", formatFunc: formatPrice },
-  { htmlId: "rep-wage-e", data: "mediumWagesE", formatFunc: formatPrice },
-  { htmlId: "rep-wage-m", data: "mediumWagesM", formatFunc: formatPrice },
-  { htmlId: "rep-high-id", data: (report) => report.highestWage.code },
-  {
-    htmlId: "rep-high-cat",
-    data: (report) => report.highestWage.category,
-    formatFunc: formatCategory,
-  },
-  {
-    htmlId: "rep-high-shift",
-    data: (report) => report.highestWage.shift,
-    formatFunc: formatShift,
-  },
-  {
-    htmlId: "rep-high-wage",
-    data: (report) => report.highestWage.wage,
-    formatFunc: formatPrice,
-  },
-  { htmlId: "rep-low-id", data: (report) => report.lowestWage.code },
-  {
-    htmlId: "rep-low-cat",
-    data: (report) => report.lowestWage.category,
-    formatFunc: formatCategory,
-  },
-  {
-    htmlId: "rep-low-shift",
-    data: (report) => report.lowestWage.shift,
-    formatFunc: formatShift,
-  },
-  {
-    htmlId: "rep-low-wage",
-    data: (report) => report.lowestWage.wage,
-    formatFunc: formatPrice,
-  },
-  { htmlId: "rep-bonus-10", data: "bonus10" },
-  { htmlId: "rep-bonus-5", data: "bonus5" },
-  { htmlId: "rep-bonus-2", data: "bonus2" },
-  { htmlId: "rep-bonus-0", data: "bonus0" },
-];
-
 export function init() {
-  const setContainer = document.getElementById("settingsFormContainer");
-  const empContainer = document.getElementById("employeeFormContainer");
-  const empForm = document.getElementById("employeesForm");
-
-  const sectionForms = document.getElementById("sectionForms");
-  const sectionReports = document.getElementById("sectionReports");
-
-  const setMessage = document.getElementById("formMessageSetting");
-  const empMessage = document.getElementById("formMessageEmployee");
-
-  const btnReport = document.getElementById("btnFinishForm");
-
   let minWageValue = 0;
   const employeesList = [];
 
@@ -96,32 +41,13 @@ export function init() {
     }),
   };
 
-  formSettingTemplate(
-    setupConfig,
-    setContainer,
-    empContainer,
-    setMessage,
-    (data) => {
-      minWageValue = parseFloat(data.minWage);
-    },
-  );
+  formSettingTemplate(setupConfig, (data) => {
+    minWageValue = parseFloat(data.minWage);
+  });
 
-  formRegistrationTemplate(
-    registrationConfig,
-    empForm,
-    empMessage,
-    employeesList,
-  );
+  formRegistrationTemplate(registrationConfig, employeesList);
 
-  handleFinishForms(
-    btnReport,
-    employeesList,
-    empMessage,
-    sectionForms,
-    sectionReports,
-    generateReport,
-    renderProperties,
-  );
+  handleFinishForms(employeesList, generateReport, renderProperties);
 }
 
 function calcWage(minWage, hours, selectedCatgory, selectedShift, food, bonus) {
@@ -244,3 +170,46 @@ function generateReport(list) {
     bonus0,
   };
 }
+
+const renderProperties = [
+  { htmlId: "rep-total", data: "total" },
+  { htmlId: "rep-wage-avg", data: "mediumWages", formatFunc: formatPrice },
+  { htmlId: "rep-wage-e", data: "mediumWagesE", formatFunc: formatPrice },
+  { htmlId: "rep-wage-m", data: "mediumWagesM", formatFunc: formatPrice },
+  { htmlId: "rep-high-id", data: (report) => report.highestWage.code },
+  {
+    htmlId: "rep-high-cat",
+    data: (report) => report.highestWage.category,
+    formatFunc: formatCategory,
+  },
+  {
+    htmlId: "rep-high-shift",
+    data: (report) => report.highestWage.shift,
+    formatFunc: formatShift,
+  },
+  {
+    htmlId: "rep-high-wage",
+    data: (report) => report.highestWage.wage,
+    formatFunc: formatPrice,
+  },
+  { htmlId: "rep-low-id", data: (report) => report.lowestWage.code },
+  {
+    htmlId: "rep-low-cat",
+    data: (report) => report.lowestWage.category,
+    formatFunc: formatCategory,
+  },
+  {
+    htmlId: "rep-low-shift",
+    data: (report) => report.lowestWage.shift,
+    formatFunc: formatShift,
+  },
+  {
+    htmlId: "rep-low-wage",
+    data: (report) => report.lowestWage.wage,
+    formatFunc: formatPrice,
+  },
+  { htmlId: "rep-bonus-10", data: "bonus10" },
+  { htmlId: "rep-bonus-5", data: "bonus5" },
+  { htmlId: "rep-bonus-2", data: "bonus2" },
+  { htmlId: "rep-bonus-0", data: "bonus0" },
+];

@@ -11,18 +11,6 @@ import {
 import { avgBy, countBy, extremeBy, sumBy } from "../utils/helpers.js";
 
 export function init() {
-  const setContainer = document.getElementById("settingsFormContainer");
-  const resContainer = document.getElementById("reservationFormContainer");
-  const resForm = document.getElementById("reservationForm");
-
-  const sectionForms = document.getElementById("sectionForms");
-  const sectionReports = document.getElementById("sectionReports");
-
-  const setMessage = document.getElementById("formMessageSetting");
-  const resMessage = document.getElementById("formMessageReservation");
-
-  const btnReport = document.getElementById("btnFinishForm");
-
   let dailyValue = 0;
   let breakfastValue = 0;
   const resList = [];
@@ -55,28 +43,14 @@ export function init() {
     }),
   };
 
-  formSettingTemplate(
-    setupConfig,
-    setContainer,
-    resContainer,
-    setMessage,
-    (data) => {
-      dailyValue = parseFloat(data.daily);
-      breakfastValue = parseFloat(data.breakfast);
-    },
-  );
+  formSettingTemplate(setupConfig, (data) => {
+    dailyValue = parseFloat(data.daily);
+    breakfastValue = parseFloat(data.breakfast);
+  });
 
-  formRegistrationTemplate(registrationConfig, resForm, resMessage, resList);
+  formRegistrationTemplate(registrationConfig, resList);
 
-  handleFinishForms(
-    btnReport,
-    resList,
-    resMessage,
-    sectionForms,
-    sectionReports,
-    generateReport,
-    renderProperties,
-  );
+  handleFinishForms(resList, generateReport, renderProperties);
 }
 
 function calcReserv(b, rt, s, bf, bfv, g, d) {

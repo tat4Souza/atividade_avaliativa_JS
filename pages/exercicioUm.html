@@ -20,7 +20,7 @@
       </form>
     </div>
 
-    <div class="form__container hideComponent" id="ordersFormContainer">
+    <div class="form__container hideComponent" id="registrationFormContainer">
       <div class="form__header">
         <p>
           Preencha as informações dos pedidos e, quando estiver pronto, clique
@@ -28,7 +28,7 @@
         </p>
         <button class="form__btn" id="btnFinishForm">Gerar relatório</button>
       </div>
-      <form id="ordersForm">
+      <form id="registrationForm">
         <custom-input
           name="ord-id"
           title="Código do pedido"
@@ -60,7 +60,10 @@
           type="checkbox"
         ></custom-input>
 
-        <label id="formMessageOrder" class="hideComponent form-message"></label>
+        <label
+          id="formMessageRegistration"
+          class="hideComponent form-message"
+        ></label>
 
         <button type="submit" class="form__btn">Enviar</button>
       </form>
@@ -74,25 +77,15 @@
       <li>Valor médio pago por pedido: <span id="rep-order-avg"></span></li>
       <li>
         Valor por região:
-        <div>
-          <p>Sudeste: <span id="rep-reg-se"></span></p>
-          <p>Sul: <span id="rep-reg-s"></span></p>
-          <p>Centro-Oeste: <span id="rep-reg-m"></span></p>
-        </div>
+        <div id="rep-reg"></div>
       </li>
       <li>
         Pedido mais caro:
-        <div>
-          <p>Código: <span id="rep-exp-id"></span></p>
-          <p>Valor Total pago: <span id="rep-exp-tot"></span></p>
-        </div>
+        <div id="rep-exp"></div>
       </li>
       <li>
         Pedido mais barato:
-        <div>
-          <p>Código: <span id="rep-che-id"></span></p>
-          <p>Valor Total pago: <span id="rep-che-tot"></span></p>
-        </div>
+        <div id="rep-cheap"></div>
       </li>
     </ul>
   </section>

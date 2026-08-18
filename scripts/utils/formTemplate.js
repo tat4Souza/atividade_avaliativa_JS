@@ -5,14 +5,12 @@ import {
 } from "./helpers.js";
 import { renderReportTemplate } from "./reportTemplate.js";
 
-export function formSettingTemplate(
-  fieldsConfig,
-  curContainer,
-  newContainer,
-  messageLabel,
-  onSuccess,
-) {
-  curContainer.addEventListener("submit", (e) => {
+export function formSettingTemplate(fieldsConfig, onSuccess) {
+  const setContainer = document.getElementById("settingsFormContainer");
+  const regContainer = document.getElementById("registrationFormContainer");
+  const messageLabel = document.getElementById("formMessageRegistration");
+
+  setContainer.addEventListener("submit", (e) => {
     e.preventDefault();
 
     const collectedData = {};
@@ -37,7 +35,7 @@ export function formSettingTemplate(
       return;
     }
 
-    alterComponentVisibility(curContainer, newContainer);
+    alterComponentVisibility(setContainer, regContainer);
 
     if (typeof onSuccess === "function") {
       onSuccess(collectedData);
@@ -45,20 +43,10 @@ export function formSettingTemplate(
   });
 }
 
-const registrationConfigExample = {
-  fields: {
-    id: { htmlId: "ord_id", type: "text" },
-    region: { htmlId: "ord_region", type: "text", required: "região" },
-  },
-  calculate: (data) => ({ ...data, finalWage: calcOrderTotal() }),
-};
+export function formRegistrationTemplate(fieldsConfig, dataList) {
+  const form = document.getElementById("registrationForm");
+  const messageLabel = document.getElementById("formMessageRegistration");
 
-export function formRegistrationTemplate(
-  fieldsConfig,
-  form,
-  messageLabel,
-  dataList,
-) {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -96,15 +84,12 @@ export function formRegistrationTemplate(
   });
 }
 
-export function handleFinishForms(
-  btnFinish,
-  dataList,
-  messageLabel,
-  curSection,
-  newSection,
-  genReport,
-  renderProperties,
-) {
+export function handleFinishForms(dataList, genReport, renderProperties) {
+  const btnFinish = document.getElementById("btnFinishForm");
+  const sectionForms = document.getElementById("sectionForms");
+  const sectionReports = document.getElementById("sectionReports");
+  const messageLabel = document.getElementById("formMessageRegistration");
+
   if (btnFinish) {
     btnFinish.addEventListener("click", () => {
       if (dataList.length === 0) {
@@ -115,7 +100,7 @@ export function handleFinishForms(
         return;
       }
 
-      alterComponentVisibility(curSection, newSection);
+      alterComponentVisibility(sectionForms, sectionReports);
 
       const report = typeof genReport === "function" ? genReport(dataList) : {};
       renderReportTemplate(report, renderProperties);

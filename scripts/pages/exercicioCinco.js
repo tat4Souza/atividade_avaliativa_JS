@@ -14,18 +14,6 @@ import { avgBy, countBy, extremeBy, sumBy } from "../utils/helpers.js";
 let workMaxValue = 0;
 
 export function init() {
-  const setContainer = document.getElementById("settingsFormContainer");
-  const regContainer = document.getElementById("registrationFormContainer");
-  const regForm = document.getElementById("registrationForm");
-
-  const sectionForms = document.getElementById("sectionForms");
-  const sectionReports = document.getElementById("sectionReports");
-
-  const setMessage = document.getElementById("formMessageSetting");
-  const regMessage = document.getElementById("formMessageRegistration");
-
-  const btnReport = document.getElementById("btnFinishForm");
-
   const workoutList = [];
 
   const setupConfig = {
@@ -47,32 +35,13 @@ export function init() {
     }),
   };
 
-  formSettingTemplate(
-    setupConfig,
-    setContainer,
-    regContainer,
-    setMessage,
-    (data) => {
-      workMaxValue = Number(data.workMax);
-    },
-  );
+  formSettingTemplate(setupConfig, (data) => {
+    workMaxValue = Number(data.workMax);
+  });
 
-  formRegistrationTemplate(
-    registrationConfig,
-    regForm,
-    regMessage,
-    workoutList,
-  );
+  formRegistrationTemplate(registrationConfig, workoutList);
 
-  handleFinishForms(
-    btnReport,
-    workoutList,
-    regMessage,
-    sectionForms,
-    sectionReports,
-    generateReport,
-    renderProperties,
-  );
+  handleFinishForms(workoutList, generateReport, renderProperties);
 }
 
 function calcWorkOut(t, d, i) {

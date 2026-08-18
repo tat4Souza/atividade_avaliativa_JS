@@ -136,3 +136,18 @@ export function formatMostComissionsSeller(obj) {
     <p><strong>Comissão total acumulada:</strong> ${formatPrice(obj.totalComission)}</p>
   `;
 }
+
+export function formatOrdersRegion(obj) {
+  return `
+    <p><strong>Sudeste:</strong> ${formatPrice(obj.southeast)}</p>
+    <p><strong>Sul:</strong> ${formatPrice(obj.south)}</p>
+    <p><strong>Centro-Oeste:</strong> ${formatPrice(obj.midwest)}</p>
+  `;
+}
+
+export function formatOrdersExtreme(obj) {
+  return `
+    <p><strong>Código:</strong> ${obj.id}</p>
+    <p><strong>Valor Total:</strong> ${formatPrice(obj.orderTotal)}</p>
+  `;
+}

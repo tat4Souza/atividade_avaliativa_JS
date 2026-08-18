@@ -32,15 +32,6 @@ const renderProperties = [
 ];
 
 export function init() {
-  const form = document.getElementById("stockForm");
-
-  const sectionForms = document.getElementById("sectionForms");
-  const sectionReports = document.getElementById("sectionReports");
-
-  const message = document.getElementById("formMessage");
-
-  const btnReport = document.getElementById("btnFinishForm");
-
   const stockList = [];
 
   const registrationConfig = {
@@ -59,17 +50,9 @@ export function init() {
     }),
   };
 
-  formRegistrationTemplate(registrationConfig, form, message, stockList);
+  formRegistrationTemplate(registrationConfig, stockList);
 
-  handleFinishForms(
-    btnReport,
-    stockList,
-    message,
-    sectionForms,
-    sectionReports,
-    generateReport,
-    renderProperties,
-  );
+  handleFinishForms(stockList, generateReport, renderProperties);
 }
 
 function calcOrder(p, t, q) {
