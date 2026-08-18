@@ -151,3 +151,77 @@ export function formatOrdersExtreme(obj) {
     <p><strong>Valor Total:</strong> ${formatPrice(obj.orderTotal)}</p>
   `;
 }
+
+export function formatEmployeesAvg(obj) {
+  return `
+    <p><strong>Geral:</strong> ${formatPrice(obj.avg)}</p>
+    <p><strong>Funcionários Operacionais:</strong>  ${formatPrice(obj.avgEmp)}</span></p>
+    <p><strong>Gerentes:</strong> ${formatPrice(obj.avgMan)}</span></p>
+  `;
+}
+
+export function formatEmployeesExtreme(obj) {
+  return `
+    <p><strong>Código:</strong> ${obj.id}</p>
+    <p><strong>Categoria:</strong>  ${formatCategory(obj.category)}</span></p>
+    <p><strong>Turno:</strong> ${formatShift(obj.shift)}</span></p>
+    <p><strong>Valor Recebido:</strong> ${formatPrice(obj.finalWage)}</span></p>
+  `;
+}
+
+export function formatEmployeesBonus(obj) {
+  return `
+    <p><strong>Bônus 10%:</strong> ${obj.bonus10}</span></p>
+    <p><strong>Bônus 5%:</strong> ${obj.bonus5}</span></p>
+    <p><strong>Bônus 2%:</strong> ${obj.bonus2}</p>
+    <p><strong>Sem Bônus:</strong> ${obj.bonus0}</p>
+  `;
+}
+
+export function formatByStock(obj) {
+  return `
+    <p><strong>Padrão:</strong> ${formatPrice(obj.standard)}</span></p>
+    <p><strong>Premium:</strong> ${formatPrice(obj.premiuim)}</span></p>
+    <p><strong>Sob encomenda:</strong> ${formatPrice(obj.custom)}</p>
+  `;
+}
+
+export function formatStockExtreme(obj) {
+  return `
+    <p><strong>Código:</strong> ${obj.id}</p>
+    <p><strong>Valor:</strong>  ${formatCategory(obj.finalStock)}</span></p>
+  `;
+}
+
+export function formatAlerts(obj) {
+  return `
+    <p><strong>Estoque Alto:</strong>  ${obj.high}</p>
+    <p><strong>Estoque Crítico:</strong>  ${obj.critic}</p>
+  `;
+}
+
+export function formatResRoom(obj) {
+  return `
+    <p><strong>Standard: </strong>${formatPrice(obj.standard)}</p>
+    <p><strong>Luxo: </strong>${formatPrice(obj.luxury)}</p>
+    <p><strong>Premium: </strong>${formatPrice(obj.premium)}</p>
+  `;
+}
+
+export function formatResSeason(obj) {
+  return `
+    <p><strong>Baixa: </strong>${formatPrice(obj.low)}</p>
+    <p><strong>Alta: </strong>${formatPrice(obj.high)}</p>
+    <p><strong>Feriado: </strong>${formatPrice(obj.holiday)}</p>
+  `;
+}
+
+export function formatResExtreme(obj) {
+  return `
+    <p><strong>Código: </strong> ${obj.id}</p>
+    <p><strong>Tipo: </strong>${formatRoomType(obj.roomType)}</p>
+    <p><strong>Temporada: </strong>${formatSeason(obj.season)}</p>
+    <p><strong>Hóspedes: </strong>${obj.guests}</p>
+    <p><strong>Valor: </strong>${formatPrice(obj.reservTotal)}</p>
+  `;
+}

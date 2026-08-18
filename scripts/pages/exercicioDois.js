@@ -6,10 +6,19 @@ import {
 } from "../utils/formTemplate.js";
 import {
   formatCategory,
+  formatEmployeesAvg,
+  formatEmployeesBonus,
+  formatEmployeesExtreme,
   formatPrice,
   formatShift,
 } from "../utils/formatFunctions.js";
-import { alterComponentVisibility, showMessage } from "../utils/helpers.js";
+import {
+  alterComponentVisibility,
+  avgBy,
+  countBy,
+  extremeBy,
+  showMessage,
+} from "../utils/helpers.js";
 
 export function init() {
   let minWageValue = 0;
@@ -93,123 +102,57 @@ function calcWage(minWage, hours, selectedCatgory, selectedShift, food, bonus) {
 }
 
 function generateReport(list) {
-  let sumWages = 0;
-  let sumWagesE = 0;
-  let countE = 0;
-  let sumWagesM = 0;
-  let countM = 0;
-  let bonus10 = 0;
-  let bonus5 = 0;
-  let bonus2 = 0;
-  let bonus0 = 0;
+  const mediumWages = {
+    avg: avgBy(list, "finalWage"),
+    avgEmp: avgBy(
+      list.filter((e) => e.category === "opt1"),
+      "finalWage",
+    ),
+    avgMan: avgBy(
+      list.filter((e) => e.category === "opt2"),
+      "finalWage",
+    ),
+  };
 
-  let highWage = 0;
-  let lowWage = Infinity;
-  let highestWage = { code: "", category: "", shift: "", wage: 0 };
-  let lowestWage = { code: "", category: "", shift: "", wage: 0 };
+  const highestWage = extremeBy(list, "finalWage");
+  const lowestWage = extremeBy(list, "finalWage", "min");
 
-  for (let employee of list) {
-    sumWages += employee.finalWage;
-
-    switch (employee.category) {
-      case "opt1":
-        sumWagesE += employee.finalWage;
-        countE += 1;
-        break;
-      case "opt2":
-        sumWagesM += employee.finalWage;
-        countM += 1;
-        break;
-    }
-
-    if (employee.bonus >= 9.0) {
-      bonus10 += 1;
-    } else if (employee.bonus >= 7.0) {
-      bonus5 += 1;
-    } else if (employee.bonus >= 5) {
-      bonus2 += 1;
-    } else {
-      bonus0 += 1;
-    }
-
-    if (employee.finalWage > highWage) {
-      highWage = employee.finalWage;
-      highestWage = {
-        code: employee.id,
-        category: employee.category,
-        shift: employee.shift,
-        wage: employee.finalWage,
-      };
-    }
-
-    if (employee.finalWage < lowWage) {
-      lowWage = employee.finalWage;
-      lowestWage = {
-        code: employee.id,
-        category: employee.category,
-        shift: employee.shift,
-        wage: employee.finalWage,
-      };
-    }
-  }
-
-  const mediumWages = list.length > 0 ? sumWages / list.length : 0;
-  const mediumWagesE = list.length > 0 ? sumWagesE / countE : 0;
-  const mediumWagesM = list.length > 0 ? sumWagesM / countM : 0;
+  const bonus = {
+    bonus10: countBy(list, (p) => p.bonus >= 9.0),
+    bonus5: countBy(list, (p) => p.bonus >= 7.0 && p.bonus < 9.0),
+    bonus2: countBy(list, (p) => p.bonus >= 5.0 && p.bonus < 7.0),
+    bonus0: countBy(list, (p) => p.bonus < 5.0),
+  };
 
   return {
     total: list.length,
     mediumWages,
-    mediumWagesE,
-    mediumWagesM,
     highestWage,
     lowestWage,
-    bonus10,
-    bonus5,
-    bonus2,
-    bonus0,
+    bonus,
   };
 }
 
 const renderProperties = [
   { htmlId: "rep-total", data: "total" },
-  { htmlId: "rep-wage-avg", data: "mediumWages", formatFunc: formatPrice },
-  { htmlId: "rep-wage-e", data: "mediumWagesE", formatFunc: formatPrice },
-  { htmlId: "rep-wage-m", data: "mediumWagesM", formatFunc: formatPrice },
-  { htmlId: "rep-high-id", data: (report) => report.highestWage.code },
   {
-    htmlId: "rep-high-cat",
-    data: (report) => report.highestWage.category,
-    formatFunc: formatCategory,
+    htmlId: "rep-avg",
+    data: (rep) => rep.mediumWages,
+    formatFunc: formatEmployeesAvg,
   },
   {
-    htmlId: "rep-high-shift",
-    data: (report) => report.highestWage.shift,
-    formatFunc: formatShift,
+    htmlId: "rep-high",
+    data: (rep) => rep.highestWage,
+    formatFunc: formatEmployeesExtreme,
   },
   {
-    htmlId: "rep-high-wage",
-    data: (report) => report.highestWage.wage,
-    formatFunc: formatPrice,
-  },
-  { htmlId: "rep-low-id", data: (report) => report.lowestWage.code },
-  {
-    htmlId: "rep-low-cat",
-    data: (report) => report.lowestWage.category,
-    formatFunc: formatCategory,
+    htmlId: "rep-low",
+    data: (rep) => rep.lowestWage,
+    formatFunc: formatEmployeesExtreme,
   },
   {
-    htmlId: "rep-low-shift",
-    data: (report) => report.lowestWage.shift,
-    formatFunc: formatShift,
+    htmlId: "rep-bonus",
+    data: (rep) => rep.bonus,
+    formatFunc: formatEmployeesBonus,
   },
-  {
-    htmlId: "rep-low-wage",
-    data: (report) => report.lowestWage.wage,
-    formatFunc: formatPrice,
-  },
-  { htmlId: "rep-bonus-10", data: "bonus10" },
-  { htmlId: "rep-bonus-5", data: "bonus5" },
-  { htmlId: "rep-bonus-2", data: "bonus2" },
-  { htmlId: "rep-bonus-0", data: "bonus0" },
 ];

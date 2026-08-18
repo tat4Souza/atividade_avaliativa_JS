@@ -1,7 +1,8 @@
 import {
-  formatRoomType,
-  formatSeason,
+  formatResSeason,
   formatPrice,
+  formatResRoom,
+  formatResExtreme,
 } from "../utils/formatFunctions.js";
 import {
   formRegistrationTemplate,
@@ -72,22 +73,29 @@ function calcReserv(b, rt, s, bf, bfv, g, d) {
 }
 
 function generateReport(list) {
+  function sumTypesBy(selector, option) {
+    return sumBy(list, (r) => r[selector] === option && r.reservTotal);
+  }
+
+  const totalByRoom = {
+    standard: sumTypesBy("roomType", "opt1"),
+    luxury: sumTypesBy("roomType", "opt2"),
+    premium: sumTypesBy("roomType", "opt3"),
+  };
+
+  const totalBySeason = {
+    high: sumTypesBy("season", "opt1"),
+    low: sumTypesBy("season", "opt2"),
+    holiday: sumTypesBy("season", "opt3"),
+  };
+
   const mediumPerRes = avgBy(list, "reservTotal");
-  const standardTot = sumBy(
-    list,
-    (r) => r.roomType === "opt1" && r.reservTotal,
-  );
-  const luxuryTot = sumBy(list, (r) => r.roomType === "opt2" && r.reservTotal);
-  const premiumTot = sumBy(list, (r) => r.roomType === "opt3" && r.reservTotal);
-  const lowSeaTot = sumBy(list, (r) => r.season === "opt1" && r.reservTotal);
-  const highSeaTot = sumBy(list, (r) => r.season === "opt2" && r.reservTotal);
-  const holiSeaTot = sumBy(list, (r) => r.season === "opt3" && r.reservTotal);
+
   const hasBreakfast = countBy(list, "hasBreakfast");
   const noBreakfast = countBy(list, (r) => !r.hasBreakfast);
 
   const ocupation = sumBy(list, (r) => Number(r.daily) * Number(r.guests));
-  const totalGuests = sumBy(list, "guests");
-  const mediumPerGuest = avgBy(list, "reservTotal", totalGuests);
+  const mediumPerGuest = avgBy(list, "reservTotal", sumBy(list, "guests"));
 
   const expensive = extremeBy(list, "reservTotal");
   const cheapest = extremeBy(list, "reservTotal", "min");
@@ -95,26 +103,10 @@ function generateReport(list) {
   return {
     total: list.length,
     mediumPerRes,
-    standardTot,
-    luxuryTot,
-    premiumTot,
-    lowSeaTot,
-    highSeaTot,
-    holiSeaTot,
-    expensive: {
-      code: expensive.id,
-      type: expensive.roomType,
-      season: expensive.season,
-      guests: expensive.guests,
-      total: expensive.reservTotal,
-    },
-    cheapest: {
-      code: cheapest.id,
-      type: cheapest.roomType,
-      season: cheapest.season,
-      guests: cheapest.guests,
-      total: cheapest.reservTotal,
-    },
+    totalByRoom,
+    totalBySeason,
+    expensive,
+    cheapest,
     hasBreakfast,
     noBreakfast,
     ocupation,
@@ -125,45 +117,25 @@ function generateReport(list) {
 const renderProperties = [
   { htmlId: "rep-total", data: "total" },
   { htmlId: "rep-avg", data: "mediumPerRes", formatFunc: formatPrice },
-  { htmlId: "rep-total-s", data: "standardTot", formatFunc: formatPrice },
-  { htmlId: "rep-total-l", data: "luxuryTot", formatFunc: formatPrice },
-  { htmlId: "rep-total-p", data: "premiumTot", formatFunc: formatPrice },
-  { htmlId: "rep-season-l", data: "lowSeaTot", formatFunc: formatPrice },
-  { htmlId: "rep-season-h", data: "highSeaTot", formatFunc: formatPrice },
-  { htmlId: "rep-season-hd", data: "holiSeaTot", formatFunc: formatPrice },
-  { htmlId: "rep-exp-id", data: (report) => report.expensive.code },
   {
-    htmlId: "rep-exp-type",
-    data: (report) => report.expensive.type,
-    formatFunc: formatRoomType,
+    htmlId: "rep-total-type",
+    data: (rep) => rep.totalByRoom,
+    formatFunc: formatResRoom,
   },
   {
-    htmlId: "rep-exp-sea",
-    data: (report) => report.expensive.season,
-    formatFunc: formatSeason,
-  },
-  { htmlId: "rep-exp-gue", data: (report) => report.expensive.guests },
-  {
-    htmlId: "rep-exp-tot",
-    data: (report) => report.expensive.total,
-    formatFunc: formatPrice,
-  },
-  { htmlId: "rep-cheap-id", data: (report) => report.cheapest.code },
-  {
-    htmlId: "rep-cheap-type",
-    data: (report) => report.cheapest.type,
-    formatFunc: formatRoomType,
+    htmlId: "rep-total-season",
+    data: (rep) => rep.totalBySeason,
+    formatFunc: formatResSeason,
   },
   {
-    htmlId: "rep-cheap-sea",
-    data: (report) => report.cheapest.season,
-    formatFunc: formatSeason,
+    htmlId: "rep-expensive",
+    data: (rep) => rep.expensive,
+    formatFunc: formatResExtreme,
   },
-  { htmlId: "rep-cheap-gue", data: (report) => report.cheapest.guests },
   {
-    htmlId: "rep-cheap-tot",
-    data: (report) => report.cheapest.total,
-    formatFunc: formatPrice,
+    htmlId: "rep-cheap",
+    data: (rep) => rep.cheapest,
+    formatFunc: formatResExtreme,
   },
   { htmlId: "rep-breakfast-w", data: "hasBreakfast" },
   { htmlId: "rep-breakfast-wo", data: "noBreakfast" },

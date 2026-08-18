@@ -8,7 +8,7 @@ import { renderReportTemplate } from "./reportTemplate.js";
 export function formSettingTemplate(fieldsConfig, onSuccess) {
   const setContainer = document.getElementById("settingsFormContainer");
   const regContainer = document.getElementById("registrationFormContainer");
-  const messageLabel = document.getElementById("formMessageRegistration");
+  const messageLabel = document.getElementById("formMessageSetting");
 
   setContainer.addEventListener("submit", (e) => {
     e.preventDefault();

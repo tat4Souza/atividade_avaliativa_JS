@@ -1,35 +1,15 @@
-import { formatPrice, formatProductInfo } from "../utils/formatFunctions.js";
+import {
+  formatAlerts,
+  formatByStock,
+  formatPrice,
+  formatProductInfo,
+  formatStockExtreme,
+} from "../utils/formatFunctions.js";
 import {
   formRegistrationTemplate,
   handleFinishForms,
 } from "../utils/formTemplate.js";
-
-const renderProperties = [
-  { htmlId: "rep-total", data: "total" },
-  { htmlId: "rep-stock-std", data: (report) => report.stockByType.standard },
-  { htmlId: "rep-stock-pre", data: (report) => report.stockByType.premium },
-  { htmlId: "rep-stock-cus", data: (report) => report.stockByType.custom },
-  { htmlId: "rep-avg", data: "mediumPerOrder", formatFunc: formatPrice },
-  { htmlId: "rep-high-id", data: (report) => report.highestOrder.code },
-  {
-    htmlId: "rep-high-tot",
-    data: (report) => report.highestOrder.total,
-    formatFunc: formatPrice,
-  },
-  { htmlId: "rep-low-id", data: (report) => report.lowestOrder.code },
-  {
-    htmlId: "rep-low-tot",
-    data: (report) => report.lowestOrder.total,
-    formatFunc: formatPrice,
-  },
-  { htmlId: "rep-alert-high", data: "highAlert" },
-  { htmlId: "rep-alert-crit", data: "critAlert" },
-  {
-    htmlId: "rep-prod-info",
-    data: "productsStock",
-    formatFunc: formatProductInfo,
-  },
-];
+import { avgBy, countBy, extremeBy, sumBy } from "../utils/helpers.js";
 
 export function init() {
   const stockList = [];
@@ -59,19 +39,8 @@ function calcOrder(p, t, q) {
   const numPrice = parseFloat(p);
   const numQtd = parseInt(q);
 
-  let price = 0;
-
-  switch (t) {
-    case "opt1":
-      price = numPrice;
-      break;
-    case "opt2":
-      price = numPrice * 1.1;
-      break;
-    case "opt3":
-      price = numPrice * 1.2;
-      break;
-  }
+  const tpyeDict = { opt1: 1, opt2: 1.1, opt3: 1.2 };
+  const price = numPrice * tpyeDict[t];
 
   return numQtd * price;
 }
@@ -84,67 +53,56 @@ function calcStock(s, q) {
 }
 
 function generateReport(list) {
-  let finalStockProd = 0;
-  let totalOrdersPrice = 0;
-  const productsStock = [];
-  const stockByType = {
-    standard: 0,
-    premium: 0,
-    custom: 0,
-  };
+  function acumulateStocks() {
+    const products = [];
+    for (const item of list) {
+      const itemTotal = Number(item.total) || 0;
+      const finalStock = Number(item.finalStock) || 0;
+      const existingProduct = products.find((prod) => prod.id === item.prodId);
 
-  let high = 0;
-  let low = Infinity;
-  let highestOrder = { code: "", total: 0 };
-  let lowestOrder = { code: "", total: 0 };
-
-  let highAlert = 0;
-  let critAlert = 0;
-
-  for (const item of list) {
-    const itemTotal = Number(item.total) || 0;
-    const finalStock = Number(item.finalStock) || 0;
-
-    const existingProduct = productsStock.find(
-      (prod) => prod.id === item.prodId,
-    );
-
-    if (existingProduct) {
-      existingProduct.totalStock += finalStock;
-      existingProduct.totalValue += itemTotal;
-    } else {
-      productsStock.push({
-        id: item.prodId,
-        totalStock: finalStock,
-        totalValue: itemTotal,
-      });
+      if (existingProduct) {
+        existingProduct.totalStock += finalStock;
+        existingProduct.totalValue += itemTotal;
+      } else {
+        products.push({
+          id: item.prodId,
+          totalStock: finalStock,
+          totalValue: itemTotal,
+        });
+      }
     }
 
-    if (item.prodType === "opt1") stockByType.standard += finalStock;
-    else if (item.prodType === "opt2") stockByType.premium += finalStock;
-    else if (item.prodType === "opt3") stockByType.custom += finalStock;
-
-    totalOrdersPrice += itemTotal;
-
-    if (itemTotal > high) {
-      high = itemTotal;
-      highestOrder = { code: item.id, total: itemTotal };
-    }
-
-    if (itemTotal < low) {
-      low = itemTotal;
-      lowestOrder = { code: item.id, total: itemTotal };
-    }
-
-    if (item.finalStock > 5000) {
-      highAlert += 1;
-    }
-    if (item.finalStock < 500) {
-      critAlert += 1;
-    }
+    return products;
   }
 
-  const mediumPerOrder = totalOrdersPrice / list.length;
+  const productsList = acumulateStocks();
+
+  const stockByType = {
+    standard: sumBy(
+      list.filter((p) => p.prodType === "opt1"),
+      "finalStock",
+    ),
+    premiuim: sumBy(
+      list.filter((p) => p.prodType === "opt2"),
+      "finalStock",
+    ),
+    custom: sumBy(
+      list.filter((p) => p.prodType === "opt3"),
+      "finalStock",
+    ),
+  };
+
+  const mediumPerOrder = avgBy(list, "finalStock");
+
+  const highestOrder = extremeBy(list, "finalStock");
+  const lowestOrder = extremeBy(list, "finalStock", "min");
+
+  const alerts = {
+    high: countBy(list, (o) => o.finalStock > 5000),
+    critic: countBy(list, (o) => o.finalStock < 500),
+  };
+
+  const investedValue = sumBy(list, "total");
 
   return {
     total: list.length,
@@ -152,8 +110,35 @@ function generateReport(list) {
     mediumPerOrder,
     highestOrder,
     lowestOrder,
-    highAlert,
-    critAlert,
-    productsStock,
+    alerts,
+    productsList,
+    investedValue,
   };
 }
+
+const renderProperties = [
+  { htmlId: "rep-total", data: "total" },
+  {
+    htmlId: "rep-final-stock",
+    data: (rep) => rep.stockByType,
+    formatFunc: formatByStock,
+  },
+  { htmlId: "rep-avg", data: "mediumPerOrder", formatFunc: formatPrice },
+  {
+    htmlId: "rep-high",
+    data: (rep) => rep.highestOrder,
+    formatFunc: formatStockExtreme,
+  },
+  {
+    htmlId: "rep-low",
+    data: (rep) => rep.lowestOrder,
+    formatFunc: formatStockExtreme,
+  },
+  { htmlId: "rep-alerts", data: (rep) => rep.alerts, formatFunc: formatAlerts },
+  {
+    htmlId: "rep-prod-info",
+    data: (rep) => rep.productsList,
+    formatFunc: formatProductInfo,
+  },
+  { htmlId: "rep-invested", data: "investedValue", formatFunc: formatPrice },
+];
