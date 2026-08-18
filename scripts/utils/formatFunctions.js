@@ -106,3 +106,33 @@ export function formatPosition(obj) {
     </ul>
   `;
 }
+
+export function formatPerRegion(obj) {
+  return `
+    <p><strong>Norte:</strong> ${formatPrice(obj.north)}</p>
+    <p><strong>Nordeste:</strong> ${formatPrice(obj.northeast)}</p>
+    <p><strong>Sudeste:</strong> ${formatPrice(obj.southeast)}</p>
+    <p><strong>Sul:</strong> ${formatPrice(obj.south)}</p>
+  `;
+}
+
+export function formatSalesPerClient(obj) {
+  return `
+    <p><strong>Pessoa Física:</strong> ${formatPrice(obj.pf)}</p>
+    <p><strong>Pessoa Jurídica:</strong> ${formatPrice(obj.pj)}</p>
+  `;
+}
+
+export function formatMostSalesSeller(obj) {
+  return `
+    <p><strong>ID Vendedor:</strong> ${obj.sellerId}</p>
+    <p><strong>Valor total vendido:</strong> ${formatPrice(obj.totalValue)}</p>
+  `;
+}
+
+export function formatMostComissionsSeller(obj) {
+  return `
+    <p><strong>ID Vendedor:</strong> ${obj.sellerId}</p>
+    <p><strong>Comissão total acumulada:</strong> ${formatPrice(obj.totalComission)}</p>
+  `;
+}

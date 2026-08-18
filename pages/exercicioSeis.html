@@ -1,7 +1,115 @@
 <div class="main-content__container">
   <h1>Sistema de Vendas com Comissões, Metas e Performance</h1>
 
-  <section>
-    <p>Na espera de formulário com as instruções do exercício...🚧</p>
+  <section class="ex__container" id="sectionForms">
+    <div class="form__container" id="settingsFormContainer">
+      <p>Para prosseguir aos treinos, insira as informações abaixo:</p>
+      <form>
+        <custom-input
+          name="monthly-goal"
+          title="Carga máxima semanal recomendada"
+          type="text"
+        ></custom-input>
+
+        <custom-input
+          name="base-comission"
+          title="Carga máxima semanal recomendada"
+          type="text"
+        ></custom-input>
+
+        <label
+          id="formMessageSetting"
+          class="hideComponent form-message"
+        ></label>
+
+        <button type="submit" class="form__btn">Prosseguir</button>
+      </form>
+    </div>
+
+    <div class="form__container hideComponent" id="registrationFormContainer">
+      <div class="form__header">
+        <p>
+          Preencha as informações dos pedidos e, quando estiver pronto, clique
+          no botão ao lado:
+        </p>
+        <button class="form__btn" id="btnFinishForm">Gerar relatório</button>
+      </div>
+      <form id="registrationForm">
+        <custom-input
+          name="sale-id"
+          title="Código de venda"
+          type="text"
+        ></custom-input>
+
+        <custom-input
+          name="sale-seller-id"
+          title="Código do vendedor"
+          type="text"
+        ></custom-input>
+
+        <custom-input
+          name="sale-reg"
+          title="Região da loja"
+          type="select"
+          options="Norte, Nordeste, Sudeste, Sul"
+        ></custom-input>
+
+        <custom-input
+          name="sale-value"
+          title="Valor da venda"
+          type="text"
+        ></custom-input>
+
+        <custom-input
+          name="sale-client-type"
+          title="Tipo de cliente"
+          type="select"
+          options="Pessoa Física, Pessoa Jurídica"
+        ></custom-input>
+
+        <label
+          id="formMessageRegistration"
+          class="hideComponent form-message"
+        ></label>
+
+        <button type="submit" class="form__btn">Enviar</button>
+      </form>
+    </div>
+  </section>
+  <section class="hideComponent section-reports" id="sectionReports">
+    <h2>Relatório</h2>
+    <li>
+      <ul>
+        <li>Total de vendas registradas: <span id="rep-total"></span></li>
+        <li>
+          Valor total vendido por região:
+          <div id="rep-total-region"></div>
+        </li>
+        <li>
+          Valor total por tipo de cliente:
+          <div id="rep-total-client"></div>
+        </li>
+        <li>
+          Vendedor com maior valor de vendas:
+          <div id="rep-seller-value"></div>
+        </li>
+        <li>
+          Vendedor com maior comissão total:
+          <div id="rep-seller-comission"></div>
+        </li>
+        <li>
+          Quantidade de vendedores que bateram a meta:
+          <span id="rep-seller-goal"></span>
+        </li>
+        <li>
+          Comissão média geral:
+          <span id="rep-comission-avg"></span>
+        </li>
+        <li>
+          Comissão média por região:
+          <span id="rep-comission-avg-reg"></span>
+        </li>
+      </ul>
+    </li>
   </section>
 </div>
