@@ -1,7 +1,109 @@
 <div class="main-content__container">
-  <h1>Exercício Cinco</h1>
+  <h1>Sistema de Treinos Esportivos com Carga e Risco de Lesão</h1>
 
-  <section>
-    <p>Na espera de formulário com as instruções do exercício...🚧</p>
+  <section class="ex__container" id="sectionForms">
+    <div class="form__container" id="settingsFormContainer">
+      <p>Para prosseguir aos treinos, insira as informações abaixo:</p>
+      <form>
+        <custom-input
+          name="max-workout"
+          title="Carga máxima semanal recomendada"
+          type="text"
+        ></custom-input>
+
+        <label
+          id="formMessageSetting"
+          class="hideComponent form-message"
+        ></label>
+
+        <button type="submit" class="form__btn">Prosseguir</button>
+      </form>
+    </div>
+
+    <div class="form__container hideComponent" id="registrationFormContainer">
+      <div class="form__header">
+        <p>
+          Preencha as informações dos pedidos e, quando estiver pronto, clique
+          no botão ao lado:
+        </p>
+        <button class="form__btn" id="btnFinishForm">Gerar relatório</button>
+      </div>
+      <form id="registrationForm">
+        <custom-input
+          name="work-id"
+          title="Código do treino"
+          type="text"
+        ></custom-input>
+
+        <custom-input
+          name="work-name"
+          title="Nome do Jogador"
+          type="text"
+        ></custom-input>
+
+        <custom-input
+          name="work-pos"
+          title="Posição"
+          type="select"
+          options="Goleiro, Zagueiro, Meio-campo, Atacante"
+        ></custom-input>
+
+        <custom-input
+          name="work-type"
+          title="Tipo de treino"
+          type="select"
+          options="Físico, Técnico, Estratégico"
+        ></custom-input>
+
+        <custom-input
+          name="work-dur"
+          title="Duração em minutos"
+          type="text"
+        ></custom-input>
+
+        <custom-input
+          name="work-inten"
+          title="Intensidade"
+          type="number"
+        ></custom-input>
+
+        <label
+          id="formMessageRegistration"
+          class="hideComponent form-message"
+        ></label>
+
+        <button type="submit" class="form__btn">Enviar</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="hideComponent section-reports" id="sectionReports">
+    <h2>Relatório</h2>
+    <ul>
+      <li>Total de treinos cadastrados: <span id="rep-total"></span></li>
+      <li>
+        Lista de Jogadores:
+        <div id="rep-players"></div>
+      </li>
+      <li>
+        Jogador com maior carga semanal:
+        <div id="rep-max-load"></div>
+      </li>
+      <li>
+        Jogador com menor carga semanal:
+        <div id="rep-min-load"></div>
+      </li>
+      <li>
+        Quantidade de Jogadores com risco de lesão: <span id="rep-risk"></span>
+      </li>
+      <li>
+        Carga média por tipo de treino:
+        <div id="rep-work-type"></div>
+      </li>
+      <li>
+        Informações por posição:
+        <div id="rep-pos-info"></div>
+      </li>
+    </ul>
   </section>
 </div>

@@ -11,7 +11,6 @@ import {
 import { avgBy, countBy, extremeBy, sumBy } from "../utils/helpers.js";
 
 export function init() {
-  console.log("Iniciando o init");
   const setContainer = document.getElementById("settingsFormContainer");
   const resContainer = document.getElementById("reservationFormContainer");
   const resForm = document.getElementById("reservationForm");

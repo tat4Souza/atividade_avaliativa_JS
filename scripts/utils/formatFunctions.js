@@ -38,3 +38,71 @@ export function formatRoomType(type) {
 export function formatSeason(sea) {
   return sea === "opt1" ? "Baixa" : sea === "opt2" ? "Alta" : "Feriado";
 }
+
+function formatPositionName(pos) {
+  const dict = {
+    opt1: "Goleiro",
+    opt2: "Zagueiro",
+    opt3: "Meio-Campo",
+    opt4: "Atacante",
+  };
+  return dict[pos];
+}
+
+export function formatPlayers(players) {
+  if (!Array.isArray(players) || players.length === 0) {
+    return "<p>Nenhum jogador registrado.</p>";
+  }
+
+  return players
+    .map(
+      (p) => `
+        <div>
+          <p><strong>Nome do Jogador:</strong> ${p.name}</p>
+          <p><strong>Carga Semanal Total:</strong> ${p.totalLoad}</p>
+          <p><strong>Quantidade de Treinos:</strong> ${p.totalWorkouts}</p>
+        </div>`,
+    )
+    .join("");
+}
+
+export function formatLoadExtremes(obj) {
+  return `
+    <p><strong>Nome:</strong> ${obj.name}</p>
+    <p><strong>Posição:</strong> ${formatPositionName(obj.position)}</p>
+    <p><strong>Número de treinos:</strong> ${obj.totalWorkouts}</p>
+  `;
+}
+
+export function formatWorkoutType(obj) {
+  return `
+    <p><strong>Treino Físico:</strong> ${obj.phisic}</p>
+    <p><strong>Treino Técnico:</strong> ${obj.technical}</p>
+    <p><strong>Treino Estratégico:</strong> ${obj.strategic}</p>
+  `;
+}
+
+export function formatPosition(obj) {
+  return `
+    <p><strong>Goleiro</strong></p>
+    <ul>
+      <li>Total de treinos: ${obj.goalkeeper.total}</li>
+      <li>Carga Média: ${obj.goalkeeper.avg}</li>
+    </ul>
+    <p><strong>Zagueiro</strong></p>
+    <ul>
+      <li>Total de treinos: ${obj.defender.total}</li>
+      <li>Carga Média: ${obj.defender.avg}</li>
+    </ul>
+    <p><strong>Meio-Campo </strong></p>
+    <ul>
+      <li>Total de treinos: ${obj.midfielder.total}</li>
+      <li>Carga Média: ${obj.midfielder.avg}</li>
+    </ul>
+    <p><strong>Atacante</strong></p>
+    <ul>
+      <li>Total de treinos: ${obj.attacker.total}</li>
+      <li>Carga Média: ${obj.attacker.avg}</li>
+    </ul>
+  `;
+}
