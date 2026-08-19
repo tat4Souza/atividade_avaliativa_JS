@@ -2,6 +2,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const mainContent = document.getElementById("content");
   const dynamicMenu = document.getElementById("dynamicMenu");
 
+  const isLocalhost =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1";
+  const repoName = window.location.pathname.split("/")[1];
+  const BASE_PATH = isLocalhost ? "" : `/${repoName}`;
+
   const routes = {
     "/": { file: null },
     "/exercicio-1": { file: "exercicioUm" },
@@ -20,13 +26,18 @@ document.addEventListener("DOMContentLoaded", () => {
       .replace("-", "")
       .replace("io", "io ");
 
-    menuLink.innerHTML = `<a href="${path}" data-link>${formattedText}`;
+    menuLink.innerHTML = `<a href="${BASE_PATH}${path}" data-link>${formattedText}`;
     dynamicMenu.appendChild(menuLink);
+  }
+
+  const homeLink = document.querySelector(".header__title a");
+  if (homeLink) {
+    homeLink.href = `${BASE_PATH}/`;
   }
 
   async function loadHtml(fileName) {
     try {
-      const res = await fetch(`/pages/${fileName}.html`);
+      const res = await fetch(`./pages/${fileName}.html`);
       if (!res.ok) throw new Error("Página não encontrada");
       return await res.text();
     } catch (err) {
@@ -35,7 +46,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function router() {
-    const route = routes[window.location.pathname] || routes["/"];
+    let currentPath = window.location.pathname;
+    if (BASE_PATH && currentPath.startsWith(BASE_PATH)) {
+      currentPath = currentPath.slice(BASE_PATH.length) || "/";
+    }
+
+    const route = routes[currentPath] || routes["/"];
 
     if (!route.file) {
       mainContent.innerHTML = "<h2>Selecione um exercício</h2>";

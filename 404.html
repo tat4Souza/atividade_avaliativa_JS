@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecionando...</title>
+    <script>
+      // Redireciona qualquer rota 404 para o index.html preservando o path via query string
+      const segmentCount = 1; // 1 se for repo de projeto (ex: usuario.github.io/repo/), 0 se for usuario.github.io
+      const location = window.location;
+      location.replace(
+        location.protocol +
+          "//" +
+          location.hostname +
+          (location.port ? ":" + location.port : "") +
+          location.pathname
+            .split("/")
+            .slice(0, 1 + segmentCount)
+            .join("/") +
+          "/?p=/" +
+          location.pathname
+            .slice(1)
+            .split("/")
+            .slice(segmentCount)
+            .join("/")
+            .replace(/&/g, "~and~") +
+          (location.search
+            ? "&q=" + location.search.slice(1).replace(/&/g, "~and~")
+            : "") +
+          location.hash,
+      );
+    </script>
+  </head>
+  <body></body>
+</html>
