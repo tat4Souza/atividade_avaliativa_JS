@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .replace("-", "")
       .replace("io", "io ");
 
-    menuLink.innerHTML = `<a href="${BASE_PATH}${path}" data-link>${formattedText}`;
+    menuLink.innerHTML = `<a href="${BASE_PATH}${path}" data-link>${formattedText}</a>`;
     dynamicMenu.appendChild(menuLink);
   }
 
@@ -46,8 +46,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function router() {
-    let currentPath = window.location.pathname;
-    if (BASE_PATH && currentPath.startsWith(BASE_PATH)) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectPath = urlParams.get("p");
+
+    let currentPath = redirectPath || window.location.pathname;
+
+    if (!redirectPath && BASE_PATH && currentPath.startsWith(BASE_PATH)) {
       currentPath = currentPath.slice(BASE_PATH.length) || "/";
     }
 
