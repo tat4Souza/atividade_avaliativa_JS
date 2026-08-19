@@ -84,8 +84,8 @@ function generateReport(list) {
   };
 
   const totalBySeason = {
-    high: sumTypesBy("season", "opt1"),
-    low: sumTypesBy("season", "opt2"),
+    low: sumTypesBy("season", "opt1"),
+    high: sumTypesBy("season", "opt2"),
     holiday: sumTypesBy("season", "opt3"),
   };
 

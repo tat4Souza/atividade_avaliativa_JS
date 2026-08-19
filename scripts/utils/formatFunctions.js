@@ -189,7 +189,7 @@ export function formatByStock(obj) {
 export function formatStockExtreme(obj) {
   return `
     <p><strong>Código:</strong> ${obj.id}</p>
-    <p><strong>Valor:</strong>  ${formatCategory(obj.finalStock)}</span></p>
+    <p><strong>Valor:</strong>  ${formatPrice(obj.finalStock)}</span></p>
   `;
 }
 

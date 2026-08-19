@@ -92,7 +92,7 @@ function generateReport(list) {
     ),
   };
 
-  const mediumPerOrder = avgBy(list, "finalStock");
+  const mediumPerOrder = avgBy(list, "price");
 
   const highestOrder = extremeBy(list, "finalStock");
   const lowestOrder = extremeBy(list, "finalStock", "min");
